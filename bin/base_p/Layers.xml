@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<GUI>
+    <include>gui.lua</include>
+    <Layer name="BackgroundLayer">
+        <Controls>
+            <ImageWidget name="BackgroundWidget" width="1024" >
+                <!-- <position x="432" y="123" />
+                <SetTexture name="background" /> -->
+                <!-- <SetTexture name="background"> -->
+            </ImageWidget>
+        </Controls>
+       <!--   <Resource>
+            <group>BackgroundGroup</group>
+         </Resource>  -->
+         <Script>BackgroundLayerFunc</Script>
+    </Layer>
+	<Layer name="MainSceneLayer">
+		<Controls>
+			<SceneWidget name="SceneWidget"/>
+		</Controls>
+        <Script>MainSceneLayerFunc</Script>
+	</Layer>
+</GUI>
