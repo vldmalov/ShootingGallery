@@ -1,6 +1,7 @@
 #include "Scene.h"
 #include "Utils/Random.hpp"
 #include "Objects/CircleTarget.h"
+#include "Objects/Projectile.h"
 #include "Preferences.h"
 
 Scene::Scene()
@@ -59,21 +60,20 @@ void Scene::GenerateTargets()
 	assert(MIN_T_RADIUS > 0 && MAX_T_RADIUS > 0 && TARGET_MAX_SPEED > 0);
 	
 	for(unsigned i = 0; i < TARGETS_COUNT; ++i) {
-		CircleTargetPtr newTarget = std::make_shared<CircleTarget>(shared_from_this());
-		newTarget->SetTextureName("soapBubble");
 		
 		const float radius = math::random(static_cast<float>(MIN_T_RADIUS),
 										  static_cast<float>(MAX_T_RADIUS));
-		newTarget->SetRadius(radius);
 		
-		newTarget->SetPosition(FPoint(math::random(_playgroundRect.x  + radius,
-												   _playgroundRect.RightTop().x - radius),
-									  math::random(_playgroundRect.y  + radius,
-												   _playgroundRect.RightTop().y  - radius)));
+		FPoint position(math::random(_playgroundRect.x  + radius,
+									 _playgroundRect.RightTop().x - radius),
+						math::random(_playgroundRect.y  + radius,
+									 _playgroundRect.RightTop().y - radius));
 		
 		float maxSpeed = static_cast<float>(TARGET_MAX_SPEED);
-		newTarget->SetDirection(math::Vector3(math::random(-maxSpeed, maxSpeed),
-											  math::random(-maxSpeed, maxSpeed), 0.f));
+		FPoint direction(math::random(-maxSpeed, maxSpeed),
+						 math::random(-maxSpeed, maxSpeed));
+
+		CircleTargetPtr newTarget = std::make_shared<CircleTarget>(position, radius, direction);
 		
 		_targets.push_back(newTarget);
 	}
@@ -169,10 +169,19 @@ void Scene::Draw()
 	//
 	Render::device.PopMatrix();
 	
+	// Рисуем мишени
 	for(CircleTargetPtrList::const_iterator it = _targets.begin(), it_end = _targets.end();
 		it != it_end; ++it) {
 		(*it)->Draw();
 	}
+	
+	// Рисуем проджектайлы
+	for(ProjectilePtrList::const_iterator it = _projectiles.begin(), it_end = _projectiles.end();
+		it != it_end; ++it) {
+		(*it)->Draw();
+	}
+	
+	
 	
 	RenderSplineObject();
 	
@@ -278,7 +287,12 @@ void Scene::Update(float dt)
 	
 	for(CircleTargetPtrList::const_iterator it = _targets.begin(), it_end = _targets.end();
 		it != it_end; ++it) {
-		(*it)->Update(dt);
+		(*it)->Update(dt, _playgroundRect);
+	}
+	
+	for(ProjectilePtrList::const_iterator it = _projectiles.begin(), it_end = _projectiles.end();
+		it != it_end; ++it) {
+		(*it)->Update(dt, _playgroundRect);
 	}
 	
 	//
@@ -322,34 +336,44 @@ bool Scene::MouseDown(const IPoint &mouse_pos)
 		//
 		// При нажатии на правую кнопку мыши, создаём эффект шлейфа за мышкой.
 		//
-		_eff = _effCont.AddEffect("Iskra");
-		_eff->posX = mouse_pos.x + 0.f;
-		_eff->posY = mouse_pos.y + 0.f;
-		_eff->Reset();
-		
-		//
-		// И изменяем угол наклона текстуры.
-		//
-		_angle += 25;
-		while (_angle > 360)
-		{
-			_angle -= 360;
-		}
+//		_eff = _effCont.AddEffect("Iskra");
+//		_eff->posX = mouse_pos.x + 0.f;
+//		_eff->posY = mouse_pos.y + 0.f;
+//		_eff->Reset();
+//		
+//		//
+//		// И изменяем угол наклона текстуры.
+//		//
+//		_angle += 25;
+//		while (_angle > 360)
+//		{
+//			_angle -= 360;
+//		}
 	}
 	else
 	{
+		const float PROJECTILE_SPEED(200.f);
+		FPoint GunPosition = {600.f, 0.f};
+		FPoint direction(static_cast<float>(mouse_pos.x) - GunPosition.x,
+						 static_cast<float>(mouse_pos.y) - GunPosition.y);
+		direction.Normalize();
+		direction *= PROJECTILE_SPEED;
+		FPoint size(35.f, 35.f);
+		ProjectilePtr projectile = std::make_shared<Projectile>(GunPosition, direction, size);
+		_projectiles.push_back(projectile);
+		
 		//
 		// При нажатии на левую кнопку мыши, создаём временный эффект, который завершится сам.
 		//
-		ParticleEffectPtr eff = _effCont.AddEffect("FindItem2");
-		eff->posX = mouse_pos.x + 0.f;
-		eff->posY = mouse_pos.y + 0.f;
-		eff->Reset();
-		
-		//
-		// Изменяем значение с 0 на 1 и наоборот.
-		//
-		_curTex = 1 - _curTex;
+//		ParticleEffectPtr eff = _effCont.AddEffect("FindItem2");
+//		eff->posX = mouse_pos.x + 0.f;
+//		eff->posY = mouse_pos.y + 0.f;
+//		eff->Reset();
+//		
+//		//
+//		// Изменяем значение с 0 на 1 и наоборот.
+//		//
+//		_curTex = 1 - _curTex;
 	}
 	return false;
 }

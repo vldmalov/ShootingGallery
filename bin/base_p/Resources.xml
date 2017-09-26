@@ -21,5 +21,7 @@
 
     <Textures group="GameScene">
         <texture id="soapBubble" path="textures/SoapBubble" />
+        <texture id="seaStar" path="textures/seaStar" />
+        <texture id="projectile" path="textures/Rocket" />
     </Textures>
 </Resources>

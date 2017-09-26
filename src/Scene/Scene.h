@@ -6,6 +6,10 @@ class CircleTarget;
 typedef std::shared_ptr<CircleTarget> CircleTargetPtr;
 typedef std::list<CircleTargetPtr> CircleTargetPtrList;
 
+class Projectile;
+typedef std::shared_ptr<Projectile> ProjectilePtr;
+typedef std::list<ProjectilePtr> ProjectilePtrList;
+
 class Scene : public std::enable_shared_from_this<Scene> {
 
 public:
@@ -55,4 +59,5 @@ private:
 	TimedSpline<FPoint> spline;
 	
 	CircleTargetPtrList _targets;
+	ProjectilePtrList   _projectiles;
 };

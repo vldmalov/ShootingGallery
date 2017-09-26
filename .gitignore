@@ -2,6 +2,16 @@
 engine/
 libs/
 
+# Xcode
+*.pbxuser
+*.pbxproj
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.xcuserstate
+project.xcworkspace/
+xcuserdata/
+
 # Prerequisites
 *.d
 
