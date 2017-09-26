@@ -27,7 +27,8 @@
 		E737B9FA1F791BDF00017577 /* SceneWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E737B9F81F791BDF00017577 /* SceneWidget.cpp */; };
 		E737B9FD1F791E5D00017577 /* ImageWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E737B9FB1F791E5D00017577 /* ImageWidget.cpp */; };
 		E737BA001F79488F00017577 /* ButtonWidget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E737B9FE1F79488F00017577 /* ButtonWidget.cpp */; };
-		E737BA071F7958D100017577 /* CircleAim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E737BA051F7958D100017577 /* CircleAim.cpp */; };
+		E743A9181F7A462A00F925F8 /* Preferences.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E743A9161F7A462A00F925F8 /* Preferences.cpp */; };
+		E743A91B1F7A57B300F925F8 /* CircleTarget.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E743A9191F7A57B300F925F8 /* CircleTarget.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -71,8 +72,10 @@
 		E737B9FC1F791E5D00017577 /* ImageWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ImageWidget.h; path = ../../src/Widgets/ImageWidget.h; sourceTree = "<group>"; };
 		E737B9FE1F79488F00017577 /* ButtonWidget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ButtonWidget.cpp; path = ../../src/Widgets/ButtonWidget.cpp; sourceTree = "<group>"; };
 		E737B9FF1F79488F00017577 /* ButtonWidget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ButtonWidget.h; path = ../../src/Widgets/ButtonWidget.h; sourceTree = "<group>"; };
-		E737BA051F7958D100017577 /* CircleAim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CircleAim.cpp; path = ../../src/Scene/Objects/CircleAim.cpp; sourceTree = "<group>"; };
-		E737BA061F7958D100017577 /* CircleAim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CircleAim.h; path = ../../src/Scene/Objects/CircleAim.h; sourceTree = "<group>"; };
+		E743A9161F7A462A00F925F8 /* Preferences.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Preferences.cpp; path = ../../src/Preferences/Preferences.cpp; sourceTree = "<group>"; };
+		E743A9171F7A462A00F925F8 /* Preferences.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Preferences.h; path = ../../src/Preferences/Preferences.h; sourceTree = "<group>"; };
+		E743A9191F7A57B300F925F8 /* CircleTarget.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CircleTarget.cpp; path = ../../src/Scene/Objects/CircleTarget.cpp; sourceTree = "<group>"; };
+		E743A91A1F7A57B300F925F8 /* CircleTarget.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CircleTarget.h; path = ../../src/Scene/Objects/CircleTarget.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,6 +144,7 @@
 		C6C0DA011A71104B00F125C2 /* src */ = {
 			isa = PBXGroup;
 			children = (
+				E743A9151F7A461200F925F8 /* Preferences */,
 				E737B9F71F791B9A00017577 /* Widgets */,
 				E737B9F31F78F32C00017577 /* Scene */,
 				A6869E0A1D229EF600C1D1B1 /* Main.cpp */,
@@ -201,10 +205,19 @@
 		E737BA011F79583100017577 /* Objects */ = {
 			isa = PBXGroup;
 			children = (
-				E737BA051F7958D100017577 /* CircleAim.cpp */,
-				E737BA061F7958D100017577 /* CircleAim.h */,
+				E743A9191F7A57B300F925F8 /* CircleTarget.cpp */,
+				E743A91A1F7A57B300F925F8 /* CircleTarget.h */,
 			);
 			name = Objects;
+			sourceTree = "<group>";
+		};
+		E743A9151F7A461200F925F8 /* Preferences */ = {
+			isa = PBXGroup;
+			children = (
+				E743A9161F7A462A00F925F8 /* Preferences.cpp */,
+				E743A9171F7A462A00F925F8 /* Preferences.h */,
+			);
+			name = Preferences;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -297,7 +310,8 @@
 			files = (
 				E737B9F61F78F33B00017577 /* Scene.cpp in Sources */,
 				A6869E101D229EF600C1D1B1 /* TestAppDelegate.cpp in Sources */,
-				E737BA071F7958D100017577 /* CircleAim.cpp in Sources */,
+				E743A91B1F7A57B300F925F8 /* CircleTarget.cpp in Sources */,
+				E743A9181F7A462A00F925F8 /* Preferences.cpp in Sources */,
 				E737B9FA1F791BDF00017577 /* SceneWidget.cpp in Sources */,
 				A6869E0F1D229EF600C1D1B1 /* Main.cpp in Sources */,
 				E737B9FD1F791E5D00017577 /* ImageWidget.cpp in Sources */,

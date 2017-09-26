@@ -2,11 +2,11 @@
 
 class Scene;
 
-class CircleAim {
+class CircleTarget {
 	
 public:
-	CircleAim(std::weak_ptr<Scene> scene);
-	~CircleAim();
+	CircleTarget(std::weak_ptr<Scene> scene);
+	~CircleTarget();
 	
 	void Draw();
 	void Update(float dt);
@@ -37,4 +37,4 @@ private:
 
 };
 
-typedef std::shared_ptr<CircleAim> CircleAimPtr;
+typedef std::shared_ptr<CircleTarget> CircleTargetPtr;

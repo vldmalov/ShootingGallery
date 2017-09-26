@@ -7,7 +7,7 @@ ButtonWidget::ButtonWidget(const std::string& name, rapidxml::xml_node<>* elem)
 , _stretchBox(std::make_shared<StretchBox>())
 , _rect()
 {
-	std::cout << "ButtonWidget " << name << " has been constructed" << std::endl;
+	Log::log.WriteDebug("ButtonWidget " + name + " has been constructed");
 }
 
 void ButtonWidget::SetRect(const IRect& rect)
@@ -26,7 +26,7 @@ void ButtonWidget::SetTextureName(const std::string& texture_name)
 		_stretchBox->GenVertStripes(128, 16);
 	}
 	else {
-		std::cout << "SetTextureName: texture named " << texture_name << " doesn't exist!" << std::endl;
+		Log::log.WriteWarn("ButtonWidget::SetTextureName: texture named " + texture_name + " doesn't exist!");
 	}
 }
 

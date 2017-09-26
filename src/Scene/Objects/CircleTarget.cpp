@@ -1,8 +1,8 @@
-#include "CircleAim.h"
+#include "CircleTarget.h"
 
 #include "Scene.h"
 
-CircleAim::CircleAim(std::weak_ptr<Scene> scene)
+CircleTarget::CircleTarget(std::weak_ptr<Scene> scene)
 : _position()
 , _radius(0.f)
 , _direction()
@@ -12,11 +12,11 @@ CircleAim::CircleAim(std::weak_ptr<Scene> scene)
 
 }
 
-CircleAim::~CircleAim()
+CircleTarget::~CircleTarget()
 {
 }
 
-void CircleAim::Draw()
+void CircleTarget::Draw()
 {
 	if(_texture) {
 		
@@ -39,7 +39,7 @@ void CircleAim::Draw()
 	}
 }
 
-void CircleAim::Update(float dt)
+void CircleTarget::Update(float dt)
 {
 	_position += FPoint(_direction.x * dt, _direction.y * dt);
 	
@@ -55,8 +55,8 @@ void CircleAim::Update(float dt)
 	}
 }
 
-void CircleAim::CheckAndProcessBoarderCollision(float& position, float& direction,
-												float boarderMin, float boarderMax)
+void CircleTarget::CheckAndProcessBoarderCollision(float& position, float& direction,
+												   float boarderMin, float boarderMax)
 {
 	float nearestObjectEdge = position + ((direction > 0) ? 1 : -1) * _radius;
 	float distanceToBorder(0);
@@ -72,37 +72,37 @@ void CircleAim::CheckAndProcessBoarderCollision(float& position, float& directio
 	}
 }
 
-void CircleAim::SetTextureName(const std::string& textureName)
+void CircleTarget::SetTextureName(const std::string& textureName)
 {
 	_texture = Core::resourceManager.Get<Render::Texture>(textureName);
 }
 
-void CircleAim::SetPosition(const FPoint& position)
+void CircleTarget::SetPosition(const FPoint& position)
 {
 	_position = position;
 }
 
-const FPoint& CircleAim::GetPosition() const
+const FPoint& CircleTarget::GetPosition() const
 {
 	return _position;
 }
 
-void CircleAim::SetRadius(float radius)
+void CircleTarget::SetRadius(float radius)
 {
 	_radius = radius;
 }
 
-float CircleAim::GetRadius() const
+float CircleTarget::GetRadius() const
 {
 	return _radius;
 }
 
-void CircleAim::SetDirection(const math::Vector3& direction)
+void CircleTarget::SetDirection(const math::Vector3& direction)
 {
 	_direction = direction;
 }
 
-const math::Vector3& CircleAim::GetDirection() const
+const math::Vector3& CircleTarget::GetDirection() const
 {
 	return _direction;
 }

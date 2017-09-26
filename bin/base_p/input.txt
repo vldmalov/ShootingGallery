@@ -1,0 +1,6 @@
+CountTarget=30
+Speed=60
+Time=120
+MinTargetRadius=10
+MaxTargetRadius=30
+TargetMaxSpeed=200

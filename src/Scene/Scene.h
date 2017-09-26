@@ -2,9 +2,9 @@
 
 #include "list"
 
-class CircleAim;
-typedef std::shared_ptr<CircleAim> CircleAimPtr;
-typedef std::list<CircleAimPtr> CircleAimPtrList;
+class CircleTarget;
+typedef std::shared_ptr<CircleTarget> CircleTargetPtr;
+typedef std::list<CircleTargetPtr> CircleTargetPtrList;
 
 class Scene : public std::enable_shared_from_this<Scene> {
 
@@ -30,6 +30,8 @@ private:
 	void Init();
 	void RenderSplineObject();
 	
+	void GenerateTargets();
+	
 private:
 	bool _onPause;
 	
@@ -52,5 +54,5 @@ private:
 	
 	TimedSpline<FPoint> spline;
 	
-	CircleAimPtrList _aims;
+	CircleTargetPtrList _targets;
 };

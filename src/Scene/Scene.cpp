@@ -1,10 +1,7 @@
 #include "Scene.h"
 #include "Utils/Random.hpp"
-#include <iostream>
-
-#include "Objects/CircleAim.h"
-
-const unsigned AIMS_COUNT = 200;
+#include "Objects/CircleTarget.h"
+#include "Preferences.h"
 
 Scene::Scene()
 : _onPause(false)
@@ -16,11 +13,12 @@ Scene::Scene()
 , _playgroundRect()
 {
 	Init();
+	Log::log.WriteDebug("Scene has been constructed");
 }
 
 Scene::~Scene()
 {
-	std::cout << "Scene has been destroyed" << std::endl;
+	Log::log.WriteDebug("Scene has been destroyed");
 }
 
 
@@ -44,21 +42,40 @@ void Scene::Init()
 
 void Scene::Reset()
 {
-	for(unsigned i = 0; i < AIMS_COUNT; ++i) {
-		CircleAimPtr aim = std::make_shared<CircleAim>(shared_from_this());
-		aim->SetTextureName("soapBubble");
+	_targets.clear();
+	GenerateTargets();
+}
+
+void Scene::GenerateTargets()
+{
+	Preferences& prefs = Preferences::Instance();
+	const int TARGETS_COUNT = prefs.getIntValue("CountTarget", -1);
+	assert(TARGETS_COUNT > 0);
+	
+	const int MIN_T_RADIUS = prefs.getIntValue("MinTargetRadius", -1);
+	const int MAX_T_RADIUS = prefs.getIntValue("MaxTargetRadius", -1);
+	const int TARGET_MAX_SPEED = prefs.getIntValue("TargetMaxSpeed", -1);
+	
+	assert(MIN_T_RADIUS > 0 && MAX_T_RADIUS > 0 && TARGET_MAX_SPEED > 0);
+	
+	for(unsigned i = 0; i < TARGETS_COUNT; ++i) {
+		CircleTargetPtr newTarget = std::make_shared<CircleTarget>(shared_from_this());
+		newTarget->SetTextureName("soapBubble");
 		
-		const float radius = math::random(10.f, 30.f);
-		aim->SetRadius(radius);
+		const float radius = math::random(static_cast<float>(MIN_T_RADIUS),
+										  static_cast<float>(MAX_T_RADIUS));
+		newTarget->SetRadius(radius);
 		
-		aim->SetPosition(FPoint(math::random(_playgroundRect.x  + radius,
-											 _playgroundRect.RightTop().x - radius),
-								math::random(_playgroundRect.y  + radius,
-											 _playgroundRect.RightTop().y  - radius)));
+		newTarget->SetPosition(FPoint(math::random(_playgroundRect.x  + radius,
+												   _playgroundRect.RightTop().x - radius),
+									  math::random(_playgroundRect.y  + radius,
+												   _playgroundRect.RightTop().y  - radius)));
 		
-		aim->SetDirection(math::Vector3(math::random(-200.f, 200.f),
-										math::random(-200.f, 200.f), 0.f));
-		_aims.push_back(aim);
+		float maxSpeed = static_cast<float>(TARGET_MAX_SPEED);
+		newTarget->SetDirection(math::Vector3(math::random(-maxSpeed, maxSpeed),
+											  math::random(-maxSpeed, maxSpeed), 0.f));
+		
+		_targets.push_back(newTarget);
 	}
 }
 
@@ -152,7 +169,7 @@ void Scene::Draw()
 	//
 	Render::device.PopMatrix();
 	
-	for(CircleAimPtrList::const_iterator it = _aims.begin(), it_end = _aims.end();
+	for(CircleTargetPtrList::const_iterator it = _targets.begin(), it_end = _targets.end();
 		it != it_end; ++it) {
 		(*it)->Draw();
 	}
@@ -204,23 +221,16 @@ float getAngle(const FPoint& from, const FPoint& to)
 	const double EPS = 1.0E-8;
 	
 	FPoint delta = to - from;
-//	std::cout << "delta" << delta.x << " " << delta.y << std::endl;
 	
 	if(fabs(delta.x) <= EPS) {
-//		std::cout << "getAngle. dx is nill" << std::endl;
 		return 180.f * math::PI / 2.f;
 	}
 	
 	if(fabs(delta.y) <= EPS) {
-//		std::cout << "getAngle. dy is nill" << std::endl;
 		return 0.0f;
 	}
-
 	
 	return 180.f * math::atan(delta.y, delta.x);
-	
-	//если y1 = y2, то угол нулевой, если x1 = x2, то угол равен 90 градусов.
-	//В остальных случаях угол вычисляется как арктангенс (y2-y1)/(x2-x1) или арккотангенс (x2-x1)/(y2-y1)
 }
 
 void Scene::RenderSplineObject()
@@ -232,7 +242,6 @@ void Scene::RenderSplineObject()
 	const float DELTA = 1.0E-4;
 	
 	float splineProgress = math::clamp(0.0f, 1.0f, _timer / (2 * math::PI));
-//	std::cout << "splineProgress = " << splineProgress << std::endl;
 	FPoint currentPosition = spline.getGlobalFrame(splineProgress);
 	
 	FPoint from, to;
@@ -248,7 +257,6 @@ void Scene::RenderSplineObject()
 	
 	
 	float angle = getAngle(from, to);
-//	std::cout << "ANGLE = " << angle << std::endl;
 	
 	//
 	// И рисуем объект в этих координатах
@@ -268,7 +276,7 @@ void Scene::Update(float dt)
 	//
 	_effCont.Update(dt);
 	
-	for(CircleAimPtrList::const_iterator it = _aims.begin(), it_end = _aims.end();
+	for(CircleTargetPtrList::const_iterator it = _targets.begin(), it_end = _targets.end();
 		it != it_end; ++it) {
 		(*it)->Update(dt);
 	}

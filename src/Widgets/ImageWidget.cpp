@@ -7,7 +7,7 @@ ImageWidget::ImageWidget(const std::string& name, rapidxml::xml_node<>* elem)
 , _outputRect()
 , _scale(1.f, 1.f)
 {
-	std::cout << "ImageWidget " << name << " has been constructed" << std::endl;
+	Log::log.WriteDebug("ImageWidget " + name + " has been constructed");
 }
 
 void ImageWidget::SetOutputRect(const IRect& rect)
@@ -22,7 +22,7 @@ void ImageWidget::SetTextureName(const std::string& texture_name)
 	UpdateScale();
 	
 	if(!_texture) {
-		std::cout << "ImageWidget::SetTextureName: texture named " << texture_name << " doesn't exist!" << std::endl;
+		Log::log.WriteWarn("ImageWidget::SetTextureName: texture named " + texture_name + " doesn't exist!");
 	}
 }
 
