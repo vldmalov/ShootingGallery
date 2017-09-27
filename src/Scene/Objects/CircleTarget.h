@@ -15,6 +15,7 @@ public:
 	void Update(float dt, const IRect& boundingBox) override;
 	
 	bool IsPointInTarget(const FPoint& point) const;
+	bool IsCollisionWithCircle(const FPoint& point, float radius) const;
 	
 	float GetRadius() const;
 };

@@ -72,8 +72,10 @@ ProjectilePtr CannonObject::Shot()
 	
 	direction.Rotate(math::PI * (_turretAngle / 180.f));
 	
-	FPoint size(35.f, 35.f);
-	return std::make_shared<Projectile>(GetBulletOutPoint(), size, direction);
+	float projectileSize = Preferences::Instance().getFloatValue("ProjectileSize", 0.f);
+	assert(projectileSize > 0);
+	
+	return std::make_shared<Projectile>(GetBulletOutPoint(), FPoint(projectileSize, projectileSize), direction);
 }
 	
 void CannonObject::Update(float dt)

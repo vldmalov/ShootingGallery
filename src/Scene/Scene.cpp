@@ -8,8 +8,7 @@
 namespace Scene {
 	
 Scene::Scene()
-: _onPause(false)
-, _curTex(0)
+: _curTex(0)
 , _timer(0)
 , _angle(0)
 , _eff(nullptr)
@@ -18,6 +17,7 @@ Scene::Scene()
 , _timeIsOver(false)
 , _playgroundRect()
 , _cannon(nullptr)
+, _score(0)
 {
 	Init();
 	Log::log.WriteDebug("Scene has been constructed");
@@ -49,14 +49,14 @@ void Scene::Init()
 
 void Scene::Reset()
 {
+	_score = 0;
+	
 	_targets.clear();
 	_timeIsOver = false;
 	
-	Preferences& prefs = Preferences::Instance();
-	int gameTime = prefs.getIntValue("Time", -1);
-	assert(gameTime > 0);
+	_timeToEnd = Preferences::Instance().getFloatValue("Time", 0.f);
+	assert(_timeToEnd > 0);
 	
-	_timeToEnd = static_cast<float>(gameTime);
 	GenerateTargets();
 }
 
@@ -115,11 +115,6 @@ void Scene::setPlaygroundRect(const IRect& rect)
 const IRect& Scene::getPlaygroundRect() const
 {
 	return _playgroundRect;
-}
-
-void Scene::SetPause(bool onPause)
-{
-	_onPause = onPause;
 }
 
 void Scene::DrawObjects(const SceneDynamicObjectPtrList& objectList)
@@ -307,15 +302,25 @@ void Scene::Draw()
 //	Render::device.PopMatrix();
 //}
 
-void Scene::OnTimeOver()
+void Scene::OnLevelComplete()
+{
+
+}
+	
+void Scene::OnGameOver()
 {
 	_timeIsOver = true;
 	
 	// Show results
 	// Show menu
 }
+	
+void Scene::OnDestroyTarget()
+{
+	++_score;
+}
 
-void Scene::UpdateObjects(SceneDynamicObjectPtrList& objectList, float dt)
+void Scene::UpdateObjects(SceneDynamicObjectPtrList& objectList, float dt, VoidFunc cbOnDelete)
 {
 	SceneDynamicObjectPtrList::const_iterator it = objectList.begin();
 	while(it != objectList.end())
@@ -324,6 +329,10 @@ void Scene::UpdateObjects(SceneDynamicObjectPtrList& objectList, float dt)
 		
 		if((*it)->IsMarkedOnDelete()) {
 			objectList.erase(it++);
+			
+			if(cbOnDelete) {
+				cbOnDelete();
+			}
 		}
 		else {
 			++it;
@@ -335,7 +344,7 @@ void Scene::Update(float dt)
 {
 	_timeToEnd -= dt;
 	if (_timeToEnd < 0.f && !_timeIsOver) {
-		OnTimeOver();
+		OnGameOver();
 	}
 	
 	if(_timeIsOver) {
@@ -346,20 +355,21 @@ void Scene::Update(float dt)
 	//
 	_effCont.Update(dt);
 	
-	UpdateObjects(_targets,     dt);
-	UpdateObjects(_projectiles, dt);
+	UpdateObjects(_targets,     dt, std::bind(&Scene::OnDestroyTarget, this));
+	UpdateObjects(_projectiles, dt, nullptr);
 	
 	if(_cannon) {
 		_cannon->Update(dt);
 	}
 	
+	float projectileCollisionRadius = Preferences::Instance().getFloatValue("ProjectileCollisionRadius", 0.f);
 	for(SceneDynamicObjectPtr projectilePtr : _projectiles) {
 		const FPoint& projectilePos = projectilePtr->GetPosition();
 	
 		for(SceneDynamicObjectPtr objectPtr : _targets) {
 			CircleTargetPtr targetPtr = dynamic_pointer_cast<CircleTarget>(objectPtr);
 			if(targetPtr) {
-				if(targetPtr->IsPointInTarget(projectilePos)) {
+				if(targetPtr->IsCollisionWithCircle(projectilePos, projectileCollisionRadius)) {
 					projectilePtr->SetMarkedOnDelete(true);
 					targetPtr->SetMarkedOnDelete(true);
 					break;

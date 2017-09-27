@@ -27,5 +27,10 @@ bool CircleTarget::IsPointInTarget(const FPoint& point) const
 {
 	return _position.GetDistanceTo(point) < GetRadius();
 }
+	
+bool CircleTarget::IsCollisionWithCircle(const FPoint& point, float radius) const
+{
+	return _position.GetDistanceTo(point) < (GetRadius() + radius);
+}
 
 }

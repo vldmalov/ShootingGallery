@@ -10,6 +10,8 @@ typedef std::list<SceneDynamicObjectPtr> SceneDynamicObjectPtrList;
 	
 class CannonObject;
 typedef std::unique_ptr<CannonObject> CannonObjectPtr;
+	
+typedef std::function<void(void)> VoidFunc;
 
 class Scene : public std::enable_shared_from_this<Scene> {
 
@@ -28,22 +30,19 @@ public:
 	void MouseMove(const IPoint& mouse_pos);
 	void MouseUp(const IPoint& mouse_pos);
 	
-	
-	void SetPause(bool onPause);
-	
 private:
 	void Init();
 	void RenderSplineObject();
 	
 	void GenerateTargets();
 	
-	void OnTimeOver();
+	void OnLevelComplete();
+	void OnGameOver();
 	
-	void UpdateObjects(SceneDynamicObjectPtrList& objectList, float dt);
+	void UpdateObjects(SceneDynamicObjectPtrList& objectList, float dt, VoidFunc cbOnDelete);
 	void DrawObjects(const SceneDynamicObjectPtrList& objectList);
 	
-private:
-	bool _onPause;
+	void OnDestroyTarget();
 	
 private:
 	
@@ -64,10 +63,13 @@ private:
 	
 	TimedSpline<FPoint> spline;
 	
+	
 	CannonObjectPtr	_cannon;
 	
 	SceneDynamicObjectPtrList _targets;
 	SceneDynamicObjectPtrList _projectiles;
+	
+	unsigned _score;
 	
 	float _timeToEnd;
 	bool _timeIsOver;
