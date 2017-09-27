@@ -4,6 +4,8 @@
 #include "Objects/Projectile.h"
 #include "Preferences.h"
 
+namespace Scene {
+	
 Scene::Scene()
 : _onPause(false)
 , _curTex(0)
@@ -11,6 +13,8 @@ Scene::Scene()
 , _angle(0)
 , _eff(nullptr)
 , _scale(0.f)
+, _timeToEnd(0.f)
+, _timeIsOver(false)
 , _playgroundRect()
 {
 	Init();
@@ -44,6 +48,13 @@ void Scene::Init()
 void Scene::Reset()
 {
 	_targets.clear();
+	_timeIsOver = false;
+	
+	Preferences& prefs = Preferences::Instance();
+	int gameTime = prefs.getIntValue("Time", -1);
+	assert(gameTime > 0);
+	
+	_timeToEnd = static_cast<float>(gameTime);
 	GenerateTargets();
 }
 
@@ -74,6 +85,7 @@ void Scene::GenerateTargets()
 						 math::random(-maxSpeed, maxSpeed));
 
 		CircleTargetPtr newTarget = std::make_shared<CircleTarget>(position, radius, direction);
+		//newTarget->SetProcessBoarderCollisions(false);
 		
 		_targets.push_back(newTarget);
 	}
@@ -96,6 +108,13 @@ void Scene::SetPause(bool onPause)
 	_onPause = onPause;
 }
 
+void Scene::DrawObjects(const SceneDynamicObjectPtrList& objectList)
+{
+	for(SceneDynamicObjectPtr objectPtr : objectList) {
+		objectPtr->Draw();
+	}
+}
+
 void Scene::Draw()
 {
 	//
@@ -116,6 +135,7 @@ void Scene::Draw()
 	Render::device.MatrixTranslate((float)mouse_pos.x, (float)mouse_pos.y, 0);
 	Render::device.MatrixRotate(math::Vector3(0, 0, 1), _angle);
 	
+	/*
 	if (!_curTex)
 	{
 		//
@@ -163,27 +183,17 @@ void Scene::Draw()
 		//
 		Render::DrawQuad(rect, uv);
 	}
+	 */
 	
 	//
 	// Воостанавливаем прежнее преобразование координат, снимая со стека изменённый фрейм.
 	//
 	Render::device.PopMatrix();
 	
-	// Рисуем мишени
-	for(CircleTargetPtrList::const_iterator it = _targets.begin(), it_end = _targets.end();
-		it != it_end; ++it) {
-		(*it)->Draw();
-	}
+	DrawObjects(_targets);
+	DrawObjects(_projectiles);
 	
-	// Рисуем проджектайлы
-	for(ProjectilePtrList::const_iterator it = _projectiles.begin(), it_end = _projectiles.end();
-		it != it_end; ++it) {
-		(*it)->Draw();
-	}
-	
-	
-	
-	RenderSplineObject();
+	// RenderSplineObject();
 	
 	//
 	// Этот вызов отключает текстурирование при отрисовке.
@@ -222,77 +232,117 @@ void Scene::Draw()
 	
 	Render::BindFont("arial");
 	Render::PrintString(924 + 100 / 2, 35, utils::lexical_cast(mouse_pos.x) + ", " + utils::lexical_cast(mouse_pos.y), 1.f, CenterAlign);
+	Render::PrintString(924 + 100 / 2, 55, utils::lexical_cast(static_cast<int>(_timeToEnd)) + " sec", 1.f, CenterAlign);
 	
 }
 
-float getAngle(const FPoint& from, const FPoint& to)
+//float getAngle(const FPoint& from, const FPoint& to)
+//{
+//	const double EPS = 1.0E-8;
+//	
+//	FPoint delta = to - from;
+//	
+//	if(fabs(delta.x) <= EPS) {
+//		return 180.f * math::PI / 2.f;
+//	}
+//	
+//	if(fabs(delta.y) <= EPS) {
+//		return 0.0f;
+//	}
+//	
+//	return 180.f * math::atan(delta.y, delta.x);
+//}
+
+//void Scene::RenderSplineObject()
+//{
+//	//
+//	// Получаем текущие координаты объекта, двигающегося по сплайну
+//	//
+//	
+//	const float DELTA = 1.0E-4;
+//	
+//	float splineProgress = math::clamp(0.0f, 1.0f, _timer / (2 * math::PI));
+//	FPoint currentPosition = spline.getGlobalFrame(splineProgress);
+//	
+//	FPoint from, to;
+//	if(splineProgress >= DELTA) {
+//		float beforeProgress = math::clamp(0.0f, 1.0f, splineProgress - DELTA);
+//		from = spline.getGlobalFrame(beforeProgress);
+//		to = currentPosition;
+//	} else {
+//		float afterProgress = math::clamp(0.0f, 1.0f, splineProgress + DELTA);
+//		from = currentPosition;
+//		to = spline.getGlobalFrame(afterProgress);
+//	}
+//	
+//	
+//	float angle = getAngle(from, to);
+//	
+//	//
+//	// И рисуем объект в этих координатах
+//	//
+//	Render::device.PushMatrix();
+//	
+//	Render::device.MatrixTranslate(currentPosition.x, currentPosition.y, 0);
+//	Render::device.MatrixRotate(math::Vector3(0.f, 0.f, 1.f), angle);
+//	_tex3->Draw();
+//	Render::device.PopMatrix();
+//}
+
+void Scene::OnTimeOver()
 {
-	const double EPS = 1.0E-8;
+	_timeIsOver = true;
 	
-	FPoint delta = to - from;
-	
-	if(fabs(delta.x) <= EPS) {
-		return 180.f * math::PI / 2.f;
-	}
-	
-	if(fabs(delta.y) <= EPS) {
-		return 0.0f;
-	}
-	
-	return 180.f * math::atan(delta.y, delta.x);
+	// Show results
+	// Show menu
 }
 
-void Scene::RenderSplineObject()
+void Scene::UpdateObjects(SceneDynamicObjectPtrList& objectList, float dt)
 {
-	//
-	// Получаем текущие координаты объекта, двигающегося по сплайну
-	//
-	
-	const float DELTA = 1.0E-4;
-	
-	float splineProgress = math::clamp(0.0f, 1.0f, _timer / (2 * math::PI));
-	FPoint currentPosition = spline.getGlobalFrame(splineProgress);
-	
-	FPoint from, to;
-	if(splineProgress >= DELTA) {
-		float beforeProgress = math::clamp(0.0f, 1.0f, splineProgress - DELTA);
-		from = spline.getGlobalFrame(beforeProgress);
-		to = currentPosition;
-	} else {
-		float afterProgress = math::clamp(0.0f, 1.0f, splineProgress + DELTA);
-		from = currentPosition;
-		to = spline.getGlobalFrame(afterProgress);
+	SceneDynamicObjectPtrList::const_iterator it = objectList.begin();
+	while(it != objectList.end())
+	{
+		(*it)->Update(dt, _playgroundRect);
+		
+		if((*it)->IsMarkedOnDelete()) {
+			objectList.erase(it++);
+		}
+		else {
+			++it;
+		}
 	}
-	
-	
-	float angle = getAngle(from, to);
-	
-	//
-	// И рисуем объект в этих координатах
-	//
-	Render::device.PushMatrix();
-	
-	Render::device.MatrixTranslate(currentPosition.x, currentPosition.y, 0);
-	Render::device.MatrixRotate(math::Vector3(0.f, 0.f, 1.f), angle);
-	_tex3->Draw();
-	Render::device.PopMatrix();
 }
 
 void Scene::Update(float dt)
 {
+	_timeToEnd -= dt;
+	if (_timeToEnd < 0.f && !_timeIsOver) {
+		OnTimeOver();
+	}
+	
+	if(_timeIsOver) {
+		return;
+	}
 	//
 	// Обновим контейнер с эффектами
 	//
 	_effCont.Update(dt);
 	
-	for(CircleTargetPtrList::const_iterator it = _targets.begin(), it_end = _targets.end();
-		it != it_end; ++it) {
-		(*it)->Update(dt, _playgroundRect);
-	}
+	UpdateObjects(_targets,     dt);
+	UpdateObjects(_projectiles, dt);
 	
-	for(ProjectilePtrList::const_iterator it = _projectiles.begin(), it_end = _projectiles.end();
-		it != it_end; ++it) {
-		(*it)->Update(dt, _playgroundRect);
+	for(SceneDynamicObjectPtr projectilePtr : _projectiles) {
+		const FPoint& projectilePos = projectilePtr->GetPosition();
+	
+		for(SceneDynamicObjectPtr objectPtr : _targets) {
+			CircleTargetPtr targetPtr = dynamic_pointer_cast<CircleTarget>(objectPtr);
+			if(targetPtr) {
+				if(targetPtr->IsPointInTarget(projectilePos)) {
+					projectilePtr->SetMarkedOnDelete(true);
+					targetPtr->SetMarkedOnDelete(true);
+				}
+			}
+		}
 	}
 	
 	//
@@ -331,6 +381,10 @@ void Scene::Update(float dt)
 
 bool Scene::MouseDown(const IPoint &mouse_pos)
 {
+	if(_timeIsOver) {
+		return false;
+	}
+	
 	if (Core::mainInput.GetMouseRightButton())
 	{
 		//
@@ -359,7 +413,7 @@ bool Scene::MouseDown(const IPoint &mouse_pos)
 		direction.Normalize();
 		direction *= PROJECTILE_SPEED;
 		FPoint size(35.f, 35.f);
-		ProjectilePtr projectile = std::make_shared<Projectile>(GunPosition, direction, size);
+		ProjectilePtr projectile = std::make_shared<Projectile>(GunPosition, size, direction);
 		_projectiles.push_back(projectile);
 		
 		//
@@ -401,4 +455,6 @@ void Scene::MouseUp(const IPoint &mouse_pos)
 		_eff = NULL;
 	}
 }
+	
+} // End namespace Scene
 

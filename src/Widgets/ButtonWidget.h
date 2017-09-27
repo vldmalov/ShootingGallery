@@ -2,6 +2,8 @@
 
 class StretchBox;
 
+namespace UI {
+
 class ButtonWidget : public GUI::Widget
 {
 	typedef GUI::Widget baseclass;
@@ -20,3 +22,5 @@ private:
 	std::shared_ptr<StretchBox> _stretchBox;
 	IRect _rect;
 };
+	
+}

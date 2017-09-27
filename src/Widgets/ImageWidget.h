@@ -1,7 +1,7 @@
 #pragma once
 
-class StretchBox;
-
+namespace UI {
+	
 class ImageWidget : public GUI::Widget
 {
 	typedef GUI::Widget baseclass;
@@ -21,3 +21,5 @@ private:
 	IRect _outputRect;
 	FPoint _scale;
 };
+	
+}

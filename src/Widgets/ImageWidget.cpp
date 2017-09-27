@@ -1,6 +1,8 @@
 #include "ImageWidget.h"
 #include "GUI/StretchBox.h"
 
+namespace UI {
+	
 ImageWidget::ImageWidget(const std::string& name, rapidxml::xml_node<>* elem)
 : baseclass(name, elem)
 , _texture(nullptr)
@@ -58,4 +60,6 @@ void ImageWidget::UpdateScale()
 		_scale.x = static_cast<float>(_outputRect.Width()) / textureRect.Width();
 		_scale.y = static_cast<float>(_outputRect.Height()) / textureRect.Height();
 	}
+}
+	
 }

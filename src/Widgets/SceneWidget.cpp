@@ -2,9 +2,11 @@
 
 #include "../Scene/Scene.h"
 
+namespace UI {
+	
 SceneWidget::SceneWidget(const std::string& name, rapidxml::xml_node<>* elem)
 : Widget(name)
-, _scene(new Scene())
+, _scene(new Scene::Scene())
 {
 }
 
@@ -69,4 +71,6 @@ void SceneWidget::CharPressed(int unicodeChar)
 	if (unicodeChar == L'а') {
 		// Реакция на ввод символа 'а'
 	}
+}
+
 }

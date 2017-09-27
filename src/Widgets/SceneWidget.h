@@ -1,11 +1,11 @@
 #pragma once
 
-class Scene;
+namespace Scene {
+	class Scene;
+}
 
-///
-/// Виджет - основной визуальный элемент на экране.
-/// Он отрисовывает себя, а также может содержать другие виджеты.
-///
+namespace UI {
+	
 class SceneWidget : public GUI::Widget
 {
 public:
@@ -26,5 +26,7 @@ public:
 	void CharPressed(int unicodeChar) override;
 
 private:
-	std::shared_ptr<Scene> _scene;
+	std::shared_ptr<Scene::Scene> _scene;
 };
+
+}

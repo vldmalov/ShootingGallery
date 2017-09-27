@@ -1,6 +1,8 @@
 #include "ButtonWidget.h"
 #include "GUI/StretchBox.h"
 
+namespace UI {
+	
 ButtonWidget::ButtonWidget(const std::string& name, rapidxml::xml_node<>* elem)
 : baseclass(name, elem)
 , _texture(nullptr)
@@ -38,4 +40,6 @@ void ButtonWidget::Draw()
 	}
 	
 	baseclass::Draw();
+}
+	
 }

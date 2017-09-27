@@ -2,6 +2,12 @@
 
 #include "list"
 
+namespace Scene {
+	
+class SceneDynamicObject;
+typedef std::shared_ptr<SceneDynamicObject> SceneDynamicObjectPtr;
+typedef std::list<SceneDynamicObjectPtr> SceneDynamicObjectPtrList;
+
 class CircleTarget;
 typedef std::shared_ptr<CircleTarget> CircleTargetPtr;
 typedef std::list<CircleTargetPtr> CircleTargetPtrList;
@@ -36,6 +42,11 @@ private:
 	
 	void GenerateTargets();
 	
+	void OnTimeOver();
+	
+	void UpdateObjects(SceneDynamicObjectPtrList& objectList, float dt);
+	void DrawObjects(const SceneDynamicObjectPtrList& objectList);
+	
 private:
 	bool _onPause;
 	
@@ -58,6 +69,11 @@ private:
 	
 	TimedSpline<FPoint> spline;
 	
-	CircleTargetPtrList _targets;
-	ProjectilePtrList   _projectiles;
+	SceneDynamicObjectPtrList _targets;
+	SceneDynamicObjectPtrList _projectiles;
+	
+	float _timeToEnd;
+	bool _timeIsOver;
 };
+	
+} // End namespace Scene

@@ -36,8 +36,8 @@ void TestAppDelegate::RegisterTypes()
 	// его необходимо зарегистрировать таким образом.
 	//
 	
-	REGISTER_WIDGET_XML(ImageWidget, "ImageWidget");
-	REGISTER_WIDGET_XML(SceneWidget, "SceneWidget");
+	REGISTER_WIDGET_XML(UI::ImageWidget, "ImageWidget");
+	REGISTER_WIDGET_XML(UI::SceneWidget, "SceneWidget");
 }
 
 void TestAppDelegate::LoadResources()
@@ -54,7 +54,7 @@ void TestAppDelegate::LoadResources()
 	
 	Layer* bgLayer = Core::guiManager.getLayer("BackgroundLayer");
 	if(bgLayer) {
-		ImageWidget* bgImageWidget = dynamic_cast<ImageWidget*>(bgLayer->getWidget("BackgroundWidget"));
+		UI::ImageWidget* bgImageWidget = dynamic_cast<UI::ImageWidget*>(bgLayer->getWidget("BackgroundWidget"));
 		if(bgImageWidget) {
 			bgImageWidget->SetTextureName("background");
 			bgImageWidget->SetOutputRect(ScreenRect);
@@ -63,7 +63,7 @@ void TestAppDelegate::LoadResources()
 	
 	Layer* sceneLayer = Core::guiManager.getLayer("MainSceneLayer");
 	if(sceneLayer) {
-		SceneWidget* sceneWidget = dynamic_cast<SceneWidget*>(sceneLayer->getWidget("SceneWidget"));
+		UI::SceneWidget* sceneWidget = dynamic_cast<UI::SceneWidget*>(sceneLayer->getWidget("SceneWidget"));
 		if(sceneWidget) {
 			float bottomIndent = static_cast<float>(WINDOW_HEIGHT / 3.0f);
 			IRect PlaygroundRect(ScreenRect.x, ScreenRect.y + bottomIndent,

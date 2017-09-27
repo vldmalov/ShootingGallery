@@ -1,5 +1,7 @@
 #pragma once
 
+namespace Scene {
+	
 class SceneObjectBase {
 	
 public:
@@ -18,3 +20,5 @@ protected:
 };
 
 typedef std::shared_ptr<SceneObjectBase> SceneObjectBasePtr;
+
+}

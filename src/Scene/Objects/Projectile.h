@@ -2,16 +2,22 @@
 
 #include "SceneDynamicObject.h"
 
+namespace Scene {
+	
 class Projectile : public SceneDynamicObject
 {
 public:
 	typedef SceneDynamicObject baseclass;
 	
-	Projectile(const FPoint& position, const FPoint& direction, const FPoint& size);
+	Projectile(const FPoint& position, const FPoint& size, const FPoint& direction);
 	
-	virtual void Draw() override;
 	virtual void Update(float dt, const IRect& boundingBox) override;
+	
+private:
+	virtual void OnBottomBoardCollision(float collisionSize) override;
 
 };
 
 typedef std::shared_ptr<Projectile> ProjectilePtr;
+	
+}

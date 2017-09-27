@@ -1,6 +1,7 @@
 #include "SceneObjectBase.h"
 
-
+namespace Scene {
+	
 SceneObjectBase::SceneObjectBase(const FPoint& position,
 								 const FPoint& size,
 								 const std::string& textureName)
@@ -45,5 +46,7 @@ void SceneObjectBase::Draw()
 const FPoint& SceneObjectBase::GetPosition() const
 {
 	return _position;
+}
+	
 }
 
