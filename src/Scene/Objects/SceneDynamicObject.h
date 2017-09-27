@@ -31,6 +31,8 @@ private:
 protected:
 	FPoint _direction;
 	bool   _processBoarderCollisions;
+
+private:
 	bool   _isMarkedOnDelete;
 };
 

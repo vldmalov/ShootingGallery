@@ -23,5 +23,7 @@
         <texture id="soapBubble" path="textures/SoapBubble" />
         <texture id="seaStar" path="textures/seaStar" />
         <texture id="projectile" path="textures/Rocket" />
+        <texture id="cannonBase" path="textures/CannonBase" />
+        <texture id="cannon" path="textures/Cannon" />
     </Textures>
 </Resources>

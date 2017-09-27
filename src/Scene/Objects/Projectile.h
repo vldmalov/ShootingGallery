@@ -16,8 +16,8 @@ public:
 private:
 	virtual void OnBottomBoardCollision(float collisionSize) override;
 
+private:
+	float _gravityFactor;
 };
-
-typedef std::shared_ptr<Projectile> ProjectilePtr;
 	
 }

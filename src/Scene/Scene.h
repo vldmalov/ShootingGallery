@@ -7,14 +7,9 @@ namespace Scene {
 class SceneDynamicObject;
 typedef std::shared_ptr<SceneDynamicObject> SceneDynamicObjectPtr;
 typedef std::list<SceneDynamicObjectPtr> SceneDynamicObjectPtrList;
-
-class CircleTarget;
-typedef std::shared_ptr<CircleTarget> CircleTargetPtr;
-typedef std::list<CircleTargetPtr> CircleTargetPtrList;
-
-class Projectile;
-typedef std::shared_ptr<Projectile> ProjectilePtr;
-typedef std::list<ProjectilePtr> ProjectilePtrList;
+	
+class CannonObject;
+typedef std::unique_ptr<CannonObject> CannonObjectPtr;
 
 class Scene : public std::enable_shared_from_this<Scene> {
 
@@ -68,6 +63,8 @@ private:
 	ParticleEffectPtr _eff;
 	
 	TimedSpline<FPoint> spline;
+	
+	CannonObjectPtr	_cannon;
 	
 	SceneDynamicObjectPtrList _targets;
 	SceneDynamicObjectPtrList _projectiles;

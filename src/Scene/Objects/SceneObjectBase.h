@@ -16,9 +16,9 @@ protected:
 	FPoint _position;
 	FPoint _size;
 	float  _angle;
+	
+private:
 	Render::Texture* _texture;
 };
-
-typedef std::shared_ptr<SceneObjectBase> SceneObjectBasePtr;
 
 }

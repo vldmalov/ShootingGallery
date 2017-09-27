@@ -26,7 +26,7 @@ public:
 	void CharPressed(int unicodeChar) override;
 
 private:
-	std::shared_ptr<Scene::Scene> _scene;
+	std::unique_ptr<Scene::Scene> _scene;
 };
 
 }

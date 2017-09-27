@@ -2,6 +2,7 @@
 #include "Utils/Random.hpp"
 #include "Objects/CircleTarget.h"
 #include "Objects/Projectile.h"
+#include "Objects/CannonObject.h"
 #include "Preferences.h"
 
 namespace Scene {
@@ -16,6 +17,7 @@ Scene::Scene()
 , _timeToEnd(0.f)
 , _timeIsOver(false)
 , _playgroundRect()
+, _cannon(nullptr)
 {
 	Init();
 	Log::log.WriteDebug("Scene has been constructed");
@@ -64,16 +66,15 @@ void Scene::GenerateTargets()
 	const int TARGETS_COUNT = prefs.getIntValue("CountTarget", -1);
 	assert(TARGETS_COUNT > 0);
 	
-	const int MIN_T_RADIUS = prefs.getIntValue("MinTargetRadius", -1);
-	const int MAX_T_RADIUS = prefs.getIntValue("MaxTargetRadius", -1);
+	const float MIN_T_RADIUS = prefs.getFloatValue("MinTargetRadius", -1);
+	const float MAX_T_RADIUS = prefs.getFloatValue("MaxTargetRadius", -1);
 	const int TARGET_MAX_SPEED = prefs.getIntValue("TargetMaxSpeed", -1);
 	
 	assert(MIN_T_RADIUS > 0 && MAX_T_RADIUS > 0 && TARGET_MAX_SPEED > 0);
 	
 	for(unsigned i = 0; i < TARGETS_COUNT; ++i) {
 		
-		const float radius = math::random(static_cast<float>(MIN_T_RADIUS),
-										  static_cast<float>(MAX_T_RADIUS));
+		const float radius = math::random(MIN_T_RADIUS, MAX_T_RADIUS);
 		
 		FPoint position(math::random(_playgroundRect.x  + radius,
 									 _playgroundRect.RightTop().x - radius),
@@ -94,6 +95,19 @@ void Scene::GenerateTargets()
 void Scene::setPlaygroundRect(const IRect& rect)
 {
 	_playgroundRect = rect;
+	
+	Preferences& prefs = Preferences::Instance();
+	const int CANNON_BASE_WIDTH = prefs.getIntValue("CannonBaseWidth", -1);
+	const int CANNON_BASE_HEIGHT = prefs.getIntValue("CannonBaseHeight", -1);
+	
+	assert(CANNON_BASE_WIDTH > 0 && CANNON_BASE_HEIGHT > 0);
+	FPoint CannonSize(static_cast<float>(CANNON_BASE_WIDTH),
+					  static_cast<float>(CANNON_BASE_HEIGHT));
+	
+	const float BOARDER_INDENT = 14.f;
+	FPoint CannonPosition(static_cast<float>(_playgroundRect.Width()) / 2.f, CannonSize.y / 2.f + BOARDER_INDENT);
+	
+	_cannon = CannonObjectPtr(new CannonObject(CannonPosition, CannonSize));
 	
 	Reset();
 }
@@ -192,6 +206,10 @@ void Scene::Draw()
 	
 	DrawObjects(_targets);
 	DrawObjects(_projectiles);
+	
+	if(_cannon) {
+		_cannon->Draw();
+	}
 	
 	// RenderSplineObject();
 	
@@ -331,6 +349,10 @@ void Scene::Update(float dt)
 	UpdateObjects(_targets,     dt);
 	UpdateObjects(_projectiles, dt);
 	
+	if(_cannon) {
+		_cannon->Update(dt);
+	}
+	
 	for(SceneDynamicObjectPtr projectilePtr : _projectiles) {
 		const FPoint& projectilePos = projectilePtr->GetPosition();
 	
@@ -340,6 +362,7 @@ void Scene::Update(float dt)
 				if(targetPtr->IsPointInTarget(projectilePos)) {
 					projectilePtr->SetMarkedOnDelete(true);
 					targetPtr->SetMarkedOnDelete(true);
+					break;
 				}
 			}
 		}
@@ -406,15 +429,11 @@ bool Scene::MouseDown(const IPoint &mouse_pos)
 	}
 	else
 	{
-		const float PROJECTILE_SPEED(200.f);
-		FPoint GunPosition = {600.f, 0.f};
-		FPoint direction(static_cast<float>(mouse_pos.x) - GunPosition.x,
-						 static_cast<float>(mouse_pos.y) - GunPosition.y);
-		direction.Normalize();
-		direction *= PROJECTILE_SPEED;
-		FPoint size(35.f, 35.f);
-		ProjectilePtr projectile = std::make_shared<Projectile>(GunPosition, size, direction);
-		_projectiles.push_back(projectile);
+		if(_cannon && _cannon->CanShot()) {
+			ProjectilePtr projectile = _cannon->Shot();
+			_projectiles.push_back(projectile);
+		}
+		
 		
 		//
 		// При нажатии на левую кнопку мыши, создаём временный эффект, который завершится сам.
@@ -432,19 +451,23 @@ bool Scene::MouseDown(const IPoint &mouse_pos)
 	return false;
 }
 
-void Scene::MouseMove(const IPoint &mouse_pos)
+void Scene::MouseMove(const IPoint &mousePosition)
 {
+	if(_cannon) {
+		_cannon->SetObservePoint(mousePosition);
+	}
+	
 	if (_eff)
 	{
 		//
 		// Если эффект создан, то перемещаем его в позицию мыши.
 		//
-		_eff->posX = mouse_pos.x + 0.f;
-		_eff->posY = mouse_pos.y + 0.f;
+		_eff->posX = mousePosition.x + 0.f;
+		_eff->posY = mousePosition.y + 0.f;
 	}
 }
 
-void Scene::MouseUp(const IPoint &mouse_pos)
+void Scene::MouseUp(const IPoint &mousePosition)
 {
 	if (_eff)
 	{

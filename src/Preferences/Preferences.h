@@ -9,6 +9,7 @@ public:
 	static Preferences& Instance();
 	
 	int getIntValue(const std::string& key, int defaultVal) const;
+	float getFloatValue(const std::string& key, float defaultVal) const;
 	std::string getStringValue(const std::string& key, const std::string& defaultVal) const;
 	
 private:

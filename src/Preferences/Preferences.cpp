@@ -65,6 +65,16 @@ int Preferences::getIntValue(const std::string& key, int defaultVal) const
 	return utils::lexical_cast<int>(strValue);
 }
 
+float Preferences::getFloatValue(const std::string& key, float defaultVal) const
+{
+	std::string strValue = getStringValue(key, std::string());
+	if(strValue.empty()) {
+		return defaultVal;
+	}
+	
+	return utils::lexical_cast<float>(strValue);
+}
+
 std::string Preferences::getStringValue(const std::string& key, const std::string& defaultVal) const
 {
 	StringMap::const_iterator findIt = prefsMap.find(key);
