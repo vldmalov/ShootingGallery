@@ -94,8 +94,6 @@ void Scene::GenerateTargets()
 
 void Scene::Draw()
 {
-
-	_effCont.Draw();
 	
 	for(CircleTargetPtr targetPtr : _targets) {
 		targetPtr->Draw();
@@ -108,6 +106,8 @@ void Scene::Draw()
 	if(_cannon) {
 		_cannon->Draw();
 	}
+	
+	_effCont.Draw();
 }
 
 void Scene::OnLevelComplete()
