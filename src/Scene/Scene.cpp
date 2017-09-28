@@ -94,6 +94,8 @@ void Scene::GenerateTargets()
 
 void Scene::Draw()
 {
+
+	_effCont.Draw();
 	
 	for(CircleTargetPtr targetPtr : _targets) {
 		targetPtr->Draw();
@@ -106,8 +108,6 @@ void Scene::Draw()
 	if(_cannon) {
 		_cannon->Draw();
 	}
-
-	_effCont.Draw();
 }
 
 void Scene::OnLevelComplete()
@@ -208,7 +208,7 @@ void Scene::ProcessCollisions()
 	
 void Scene::OnPreDestroyTarget(CircleTargetPtr obj)
 {
-	ParticleEffectPtr eff = _effCont.AddEffect("FindItem2");
+	ParticleEffectPtr eff = _effCont.AddEffect("BubbleBoom");
 	eff->SetPos( obj->GetPosition() );
 	eff->Reset();
 	
@@ -232,7 +232,7 @@ bool Scene::MouseDown(const IPoint &mouse_pos)
 		if(_cannon && _cannon->CanShot()) {
 			ProjectilePtr newProjectile = _cannon->Shot();
 			
-			ParticleEffectPtr projectileTrackEffect = _effCont.AddEffect("Iskra");
+			ParticleEffectPtr projectileTrackEffect = _effCont.AddEffect("ProjectileJet");
 			newProjectile->SetTrackEffect(projectileTrackEffect);
 			
 			_projectiles.push_back(newProjectile);

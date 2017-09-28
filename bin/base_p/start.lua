@@ -10,8 +10,8 @@ LoadResource("Resources.xml")
 --
 -- Загрузка эффектов, созданных в редакторе частиц.
 --
-LoadEffects("Example2_Flames.xml")
-LoadEffects("Example3_FindObject.xml")
+LoadEffects("BubbleBoom.xml")
+LoadEffects("ProjectileJet.xml")
 
 --
 -- Загрузка слоёв.
