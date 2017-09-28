@@ -10,9 +10,9 @@ class SceneWidget : public GUI::Widget
 {
 public:
 	SceneWidget(const std::string& name, rapidxml::xml_node<>* elem);
-	
-	void setPlaygroundRect(const IRect& rect);
 
+	void ResetScene();
+	
 	void Draw() override;
 	void Update(float dt) override;
 	

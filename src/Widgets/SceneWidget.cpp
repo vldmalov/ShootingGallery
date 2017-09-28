@@ -10,9 +10,10 @@ SceneWidget::SceneWidget(const std::string& name, rapidxml::xml_node<>* elem)
 {
 }
 
-void SceneWidget::setPlaygroundRect(const IRect& rect)
+void SceneWidget::ResetScene()
 {
-	_scene->setPlaygroundRect(rect);
+	_scene->SetRect(getClientRect());
+	_scene->Reset();
 }
 
 void SceneWidget::Draw()

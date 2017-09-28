@@ -6,22 +6,13 @@ namespace UI {
 ImageWidget::ImageWidget(const std::string& name, rapidxml::xml_node<>* elem)
 : baseclass(name, elem)
 , _texture(nullptr)
-, _outputRect()
-, _scale(1.f, 1.f)
 {
 	Log::log.WriteDebug("ImageWidget " + name + " has been constructed");
-}
-
-void ImageWidget::SetOutputRect(const IRect& rect)
-{
-	_outputRect = rect;
-	UpdateScale();
 }
 
 void ImageWidget::SetTextureName(const std::string& texture_name)
 {
 	_texture = Core::resourceManager.Get<Render::Texture>(texture_name);
-	UpdateScale();
 	
 	if(!_texture) {
 		Log::log.WriteWarn("ImageWidget::SetTextureName: texture named " + texture_name + " doesn't exist!");
@@ -38,8 +29,12 @@ void ImageWidget::Draw()
 	
 	if(_texture) {
 		Render::device.PushMatrix();
-		Render::device.MatrixTranslate(_outputRect.x, _outputRect.y, 0.f);
-		Render::device.MatrixScale(_scale.x, _scale.y, 1.f);
+		
+		const IPoint& position = getPosition();
+		Render::device.MatrixTranslate(position.x, position.y, 0.f);
+		
+		FPoint scale = GetScale();
+		Render::device.MatrixScale(scale.x, scale.y, 1.f);
 		
 		_texture->Draw();
 		
@@ -47,19 +42,17 @@ void ImageWidget::Draw()
 	}
 }
 
-void ImageWidget::UpdateScale()
+FPoint ImageWidget::GetScale() const
 {
-	_scale = FPoint(1.f, 1.f);
+	FPoint scale = FPoint(1.f, 1.f);
 	
-	if(!_texture) {
-		return;
-	}
-		
-	if(_outputRect != IRect()) {
+	if(_texture) {
 		const IRect& textureRect = _texture->getBitmapRect();
-		_scale.x = static_cast<float>(_outputRect.Width()) / textureRect.Width();
-		_scale.y = static_cast<float>(_outputRect.Height()) / textureRect.Height();
+		scale.x = static_cast<float>(getWidth()) / textureRect.Width();
+		scale.y = static_cast<float>(getHeight()) / textureRect.Height();
 	}
+	
+	return scale;
 }
 	
 }

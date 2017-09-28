@@ -3,11 +3,7 @@
     <include>gui.lua</include>
     <Layer name="BackgroundLayer">
         <Controls>
-            <ImageWidget name="BackgroundWidget" width="1024" >
-                <!-- <position x="432" y="123" />
-                <SetTexture name="background" /> -->
-                <!-- <SetTexture name="background"> -->
-            </ImageWidget>
+            <ImageWidget name="BackgroundWidget" />
         </Controls>
        <!--   <Resource>
             <group>BackgroundGroup</group>
@@ -16,7 +12,7 @@
     </Layer>
 	<Layer name="MainSceneLayer">
 		<Controls>
-			<SceneWidget name="SceneWidget"/>
+			<SceneWidget name="SceneWidget" />
 		</Controls>
         <Script>MainSceneLayerFunc</Script>
 	</Layer>

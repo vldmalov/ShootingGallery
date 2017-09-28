@@ -5,7 +5,6 @@
 -- Фактическая загрузка ресурсов с диска в память выполняется
 -- функцией UploadResourceGroup, которая вызывается ниже.
 --
-print("Load Resources")
 LoadResource("Resources.xml")
 
 --

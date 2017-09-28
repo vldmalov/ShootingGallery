@@ -7,20 +7,26 @@ namespace Scene {
 class SceneDynamicObject;
 typedef std::shared_ptr<SceneDynamicObject> SceneDynamicObjectPtr;
 typedef std::list<SceneDynamicObjectPtr> SceneDynamicObjectPtrList;
+
+class CircleTarget;
+typedef std::shared_ptr<CircleTarget> CircleTargetPtr;
+typedef std::list<CircleTargetPtr> CircleTargetPtrList;
+	
+class Projectile;
+typedef std::shared_ptr<Projectile> ProjectilePtr;
+typedef std::list<ProjectilePtr> ProjectilePtrList;
 	
 class CannonObject;
 typedef std::unique_ptr<CannonObject> CannonObjectPtr;
-	
-typedef std::function<void(void)> VoidFunc;
 
-class Scene : public std::enable_shared_from_this<Scene> {
+class Scene {
 
 public:
 	Scene();
 	~Scene();
 	
-	void setPlaygroundRect(const IRect& rect);
-	const IRect& getPlaygroundRect() const;
+	void SetRect(const IRect& rect);
+	
 	void Reset();
 	
 	void Draw();
@@ -31,48 +37,47 @@ public:
 	void MouseUp(const IPoint& mouse_pos);
 	
 private:
-	void Init();
-	void RenderSplineObject();
+	void InitCannon();
 	
 	void GenerateTargets();
 	
 	void OnLevelComplete();
 	void OnGameOver();
 	
-	void UpdateObjects(SceneDynamicObjectPtrList& objectList, float dt, VoidFunc cbOnDelete);
-	void DrawObjects(const SceneDynamicObjectPtrList& objectList);
+	void UpdateEffects(float dt);
+	void UpdateTargets(float dt);
+	void UpdateProjectiles(float dt);
+	void UpdateCannon(float dt);
 	
-	void OnDestroyTarget();
+	void ProcessCollisions();
+	
+	void OnPreDestroyTarget(CircleTargetPtr obj);
+	void OnPreDestroyProjectile(ProjectilePtr obj);
 	
 private:
 	
-	IRect _playgroundRect;
+	// Игровые объекты
+	CannonObjectPtr		_cannon;
+	CircleTargetPtrList _targets;
+	ProjectilePtrList   _projectiles;
 	
-	float _timer;
-	
-	float _scale;
-	float _angle;
-	
-	Render::Texture* _tex1;
-	Render::Texture* _tex2;
-	Render::Texture* _tex3;
-	int _curTex;
-	
+	// Контейнер эффектов
 	EffectsContainer _effCont;
-	ParticleEffectPtr _eff;
 	
-	TimedSpline<FPoint> spline;
+	// Прямоугольник всей сцены
+	IRect _sceneRect;
 	
+	// Прямоугольник размещения целей
+	IRect _targetsRect;
 	
-	CannonObjectPtr	_cannon;
+	// Игра в процессе
+	bool _isGameActive;
 	
-	SceneDynamicObjectPtrList _targets;
-	SceneDynamicObjectPtrList _projectiles;
+	// Текущее количество очков
+	unsigned _currentScore;
 	
-	unsigned _score;
-	
+	// Время до завершения раунда
 	float _timeToEnd;
-	bool _timeIsOver;
 };
 	
 } // End namespace Scene

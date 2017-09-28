@@ -57,7 +57,7 @@ void TestAppDelegate::LoadResources()
 		UI::ImageWidget* bgImageWidget = dynamic_cast<UI::ImageWidget*>(bgLayer->getWidget("BackgroundWidget"));
 		if(bgImageWidget) {
 			bgImageWidget->SetTextureName("background");
-			bgImageWidget->SetOutputRect(ScreenRect);
+			bgImageWidget->setClientRect(ScreenRect);
 		}
 	}
 	
@@ -65,13 +65,10 @@ void TestAppDelegate::LoadResources()
 	if(sceneLayer) {
 		UI::SceneWidget* sceneWidget = dynamic_cast<UI::SceneWidget*>(sceneLayer->getWidget("SceneWidget"));
 		if(sceneWidget) {
-			float bottomIndent = static_cast<float>(WINDOW_HEIGHT / 3.0f);
-			IRect PlaygroundRect(ScreenRect.x, ScreenRect.y + bottomIndent,
-								 ScreenRect.Width(), ScreenRect.Height() - bottomIndent);
-			sceneWidget->setPlaygroundRect(PlaygroundRect);
+			sceneWidget->setClientRect(ScreenRect);
+			sceneWidget->ResetScene();
 		}
 	}
-	
 }
 
 void TestAppDelegate::OnResourceLoaded() {
