@@ -10,9 +10,9 @@ namespace Scene {
 Scene::Scene()
 : _cannon(nullptr)
 , _isGameActive(false)
-, _currentScore(0)
 , _timeToEnd(0.f)
 {
+	ResetScore();
 	Log::log.WriteDebug("Scene has been constructed");
 }
 
@@ -33,7 +33,7 @@ void Scene::SetRect(const IRect& rect)
 
 void Scene::Reset()
 {
-	_currentScore = 0;
+	ResetScore();
 	
 	_targets.clear();
 	_isGameActive = true;
@@ -212,12 +212,34 @@ void Scene::OnPreDestroyTarget(CircleTargetPtr obj)
 	eff->SetPos( obj->GetPosition() );
 	eff->Reset();
 	
-	++_currentScore;
+	IncreaseScore();
 }
 
 void Scene::OnPreDestroyProjectile(ProjectilePtr obj)
 {
 	
+}
+	
+void Scene::ResetScore()
+{
+	_currentScore = 0;
+	OnScoreChanged();
+}
+	
+void Scene::IncreaseScore()
+{
+	++_currentScore;
+	OnScoreChanged();
+}
+	
+unsigned Scene::GetScore() const
+{
+	return _currentScore;
+}
+	
+void Scene::OnScoreChanged()
+{
+	// Проверка окончания игры
 }
 
 

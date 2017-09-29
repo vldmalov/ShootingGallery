@@ -6,6 +6,8 @@ namespace Scene {
 
 namespace UI {
 	
+class TopGUI;
+	
 class SceneWidget : public GUI::Widget
 {
 public:
@@ -27,6 +29,7 @@ public:
 
 private:
 	std::unique_ptr<Scene::Scene> _scene;
+	std::unique_ptr<TopGUI> _topGUI;
 };
 
 }

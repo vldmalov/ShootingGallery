@@ -12,3 +12,8 @@ function MainSceneLayerFunc(message)
     WriteMessage("TestLayerFunc has been called")
 	WriteMessage(message:getPublisher().." - "..message:getData())
 end
+
+function MenuLayerFunc(message)
+    WriteMessage("MenuLayerFunc has been called")
+    WriteMessage(message:getPublisher().." - "..message:getData())
+end

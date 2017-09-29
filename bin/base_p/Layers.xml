@@ -16,4 +16,10 @@
 		</Controls>
         <Script>MainSceneLayerFunc</Script>
 	</Layer>
+   <!--  <Layer name="MenuLayer">
+        <Controls>
+            <TopGUI name="topGUI" />
+        </Controls>
+        <Script>MenuLayerFunc</Script>
+    </Layer> -->
 </GUI>

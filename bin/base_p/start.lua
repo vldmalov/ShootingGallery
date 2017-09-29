@@ -40,3 +40,4 @@ UploadResourceGroup("GameScene")
 --
 Screen:pushLayer("BackgroundLayer")
 Screen:pushLayer("MainSceneLayer")
+--Screen:pushLayer("MenuLayer")

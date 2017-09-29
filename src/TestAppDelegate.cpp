@@ -2,6 +2,8 @@
 #include "TestAppDelegate.h"
 #include "SceneWidget.h"
 #include "ImageWidget.h"
+#include "TextWidget.h"
+#include "TopGUI.h"
 
 enum {
 	WINDOW_WIDTH = 1024,
@@ -37,7 +39,9 @@ void TestAppDelegate::RegisterTypes()
 	//
 	
 	REGISTER_WIDGET_XML(UI::ImageWidget, "ImageWidget");
+	REGISTER_WIDGET_XML(UI::TextWidget,  "TextWidget");
 	REGISTER_WIDGET_XML(UI::SceneWidget, "SceneWidget");
+	REGISTER_WIDGET_XML(UI::TopGUI,		 "TopGUI");
 }
 
 void TestAppDelegate::LoadResources()
@@ -48,8 +52,8 @@ void TestAppDelegate::LoadResources()
 	//
 	Core::LuaExecuteStartupScript("start.lua");
 	
-	// нужно разобраться как пропертя виджетов зарегистрировать
-	// для их выставления в xml лейаута
+	// Нужно разобраться как пропертя виджетов зарегистрировать
+	// для их выставления через Layers.xml
 	IRect ScreenRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 	
 	Layer* bgLayer = Core::guiManager.getLayer("BackgroundLayer");

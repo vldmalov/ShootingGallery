@@ -3,6 +3,13 @@
 
 namespace UI {
 	
+ImageWidget::ImageWidget(const std::string& name)
+: baseclass(name)
+, _texture(nullptr)
+{
+	Log::log.WriteDebug("ImageWidget " + name + " has been constructed");
+}
+	
 ImageWidget::ImageWidget(const std::string& name, rapidxml::xml_node<>* elem)
 : baseclass(name, elem)
 , _texture(nullptr)

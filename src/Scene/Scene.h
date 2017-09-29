@@ -36,6 +36,8 @@ public:
 	void MouseMove(const IPoint& mouse_pos);
 	void MouseUp(const IPoint& mouse_pos);
 	
+	unsigned GetScore() const;
+	
 private:
 	void InitCannon();
 	
@@ -53,6 +55,13 @@ private:
 	
 	void OnPreDestroyTarget(CircleTargetPtr obj);
 	void OnPreDestroyProjectile(ProjectilePtr obj);
+	
+	void ResetScore();
+	void IncreaseScore();
+	void OnScoreChanged();
+	
+	Scene(const Scene&) = delete;
+	Scene& operator=(const Scene&) = delete;
 	
 private:
 	
@@ -78,6 +87,7 @@ private:
 	
 	// Время до завершения раунда
 	float _timeToEnd;
+	
 };
 	
 } // End namespace Scene

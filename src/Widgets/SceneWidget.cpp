@@ -1,29 +1,40 @@
 #include "SceneWidget.h"
 
 #include "../Scene/Scene.h"
+#include "TopGUI.h"
 
 namespace UI {
 	
 SceneWidget::SceneWidget(const std::string& name, rapidxml::xml_node<>* elem)
 : Widget(name)
 , _scene(new Scene::Scene())
+, _topGUI(new TopGUI("topGUI"))
 {
+	
+//	void AddChild(Widget* child);
 }
 
 void SceneWidget::ResetScene()
 {
 	_scene->SetRect(getClientRect());
 	_scene->Reset();
+	
+	_topGUI->setClientRect(getClientRect());
+	_topGUI->Reset();
 }
 
 void SceneWidget::Draw()
 {
 	_scene->Draw();
+	_topGUI->Draw();
 }
 
 void SceneWidget::Update(float dt)
 {
 	_scene->Update(dt);
+	_topGUI->Update(dt);
+	
+	_topGUI->SetScore(utils::lexical_cast(_scene->GetScore()));
 }
 
 bool SceneWidget::MouseDown(const IPoint &mouse_pos)
