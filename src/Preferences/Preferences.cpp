@@ -77,7 +77,7 @@ float Preferences::getFloatValue(const std::string& key, float defaultVal) const
 
 std::string Preferences::getStringValue(const std::string& key, const std::string& defaultVal) const
 {
-	StringMap::const_iterator findIt = prefsMap.find(key);
+	StringDict::const_iterator findIt = prefsMap.find(key);
 	if(findIt == prefsMap.end()) {
 		Log::log.WriteInfo("Pref " + key + " doesn't found. Return default value");
 		return defaultVal;

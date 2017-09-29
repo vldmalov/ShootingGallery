@@ -1,7 +1,7 @@
 #pragma once
 
-#include "map"
-typedef std::map<std::string, std::string> StringMap;
+#include "unordered_map"
+typedef std::unordered_map<std::string, std::string> StringDict;
 
 class Preferences {
 	
@@ -23,5 +23,5 @@ private:
 	Preferences& operator=(const Preferences&) = delete;
 
 private:
-	StringMap prefsMap;
+	StringDict prefsMap;
 };
