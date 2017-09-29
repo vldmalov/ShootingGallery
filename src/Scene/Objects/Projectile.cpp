@@ -9,6 +9,8 @@ Projectile::Projectile(const FPoint& position, const FPoint& size, const FPoint&
 {
 	Preferences& prefs = Preferences::Instance();
 	_gravityFactor = prefs.getFloatValue("ProjectileGravity", 0.f);
+	
+	UpdateAngle();
 }
 	
 Projectile::~Projectile()
@@ -38,6 +40,11 @@ void Projectile::Update(float dt, const IRect& boundingBox)
 		_trackEffect->SetPos(GetJetPosition());
 	}
 
+	UpdateAngle();
+}
+	
+void Projectile::UpdateAngle()
+{
 	_angle = 180.f * _direction.GetAngle() / math::PI;
 }
 	

@@ -28,6 +28,8 @@ public:
 	void SetRect(const IRect& rect);
 	
 	void Reset();
+	void SetPause(bool val);
+	void TogglePause();
 	
 	void Draw();
 	void Update(float dt);
@@ -37,6 +39,7 @@ public:
 	void MouseUp(const IPoint& mouse_pos);
 	
 	unsigned GetScore() const;
+	float GetTimeToEnd() const;
 	
 private:
 	void InitCannon();
@@ -81,6 +84,9 @@ private:
 	
 	// Игра в процессе
 	bool _isGameActive;
+	
+	// Игра на паузе
+	bool _isPause;
 	
 	// Текущее количество очков
 	unsigned _currentScore;

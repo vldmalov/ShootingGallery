@@ -10,6 +10,7 @@ namespace Scene {
 Scene::Scene()
 : _cannon(nullptr)
 , _isGameActive(false)
+, _isPause(false)
 , _timeToEnd(0.f)
 {
 	ResetScore();
@@ -37,12 +38,23 @@ void Scene::Reset()
 	
 	_targets.clear();
 	_isGameActive = true;
+	_isPause = false;
 	
 	_timeToEnd = Preferences::Instance().getFloatValue("Time", 0.f);
 	assert(_timeToEnd > 0);
 	
 	InitCannon();
 	GenerateTargets();
+}
+	
+void Scene::SetPause(bool val)
+{
+	_isPause = val;
+}
+	
+void Scene::TogglePause()
+{
+	_isPause = !_isPause;
 }
 	
 void Scene::InitCannon()
@@ -126,12 +138,12 @@ void Scene::OnGameOver()
 	
 void Scene::Update(float dt)
 {
-	if(!_isGameActive) {
+	if(_isPause) {
 		return;
 	}
 	
 	_timeToEnd -= dt;
-	if (_timeToEnd < 0.f) {
+	if (_timeToEnd < 0.f && _isGameActive) {
 		OnGameOver();
 	}
 
@@ -212,7 +224,9 @@ void Scene::OnPreDestroyTarget(CircleTargetPtr obj)
 	eff->SetPos( obj->GetPosition() );
 	eff->Reset();
 	
-	IncreaseScore();
+	if(_isGameActive) {
+		IncreaseScore();
+	}
 }
 
 void Scene::OnPreDestroyProjectile(ProjectilePtr obj)
@@ -237,6 +251,11 @@ unsigned Scene::GetScore() const
 	return _currentScore;
 }
 	
+float Scene::GetTimeToEnd() const
+{
+	return _timeToEnd;
+}
+	
 void Scene::OnScoreChanged()
 {
 	// Проверка окончания игры
@@ -245,7 +264,7 @@ void Scene::OnScoreChanged()
 
 bool Scene::MouseDown(const IPoint &mouse_pos)
 {
-	if(!_isGameActive) {
+	if(!_isGameActive || _isPause) {
 		return false;
 	}
 	
@@ -265,7 +284,7 @@ bool Scene::MouseDown(const IPoint &mouse_pos)
 
 void Scene::MouseMove(const IPoint &mousePosition)
 {
-	if(!_isGameActive) {
+	if(_isPause) {
 		return;
 	}
 	

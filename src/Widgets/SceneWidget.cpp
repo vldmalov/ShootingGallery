@@ -2,6 +2,7 @@
 
 #include "../Scene/Scene.h"
 #include "TopGUI.h"
+#include "TimeUtils.h"
 
 namespace UI {
 	
@@ -35,6 +36,9 @@ void SceneWidget::Update(float dt)
 	_topGUI->Update(dt);
 	
 	_topGUI->SetScore(utils::lexical_cast(_scene->GetScore()));
+	
+	int secondsToEnd = math::ceil(_scene->GetTimeToEnd());
+	_topGUI->SetTimer( Utils::FormatTime(secondsToEnd) );
 }
 
 bool SceneWidget::MouseDown(const IPoint &mouse_pos)
@@ -80,8 +84,9 @@ void SceneWidget::CharPressed(int unicodeChar)
 	// unicodeChar - Unicode код введённого символа
 	//
 
-	if (unicodeChar == L'а') {
+	if (unicodeChar == L'p') {
 		// Реакция на ввод символа 'а'
+		_scene->TogglePause();
 	}
 }
 

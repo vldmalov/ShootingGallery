@@ -6,6 +6,7 @@ TopGUI::TopGUI(const std::string& name)
 : baseclass(name)
 , _scoreIcon(new ImageWidget("scoreIcon"))
 , _scoreText(new TextWidget("scoreText"))
+, _timerText(new TextWidget("timerText"))
 {
 	Log::log.WriteDebug("TopGUI has been constructed");
 }
@@ -14,6 +15,7 @@ TopGUI::TopGUI(const std::string& name, rapidxml::xml_node<>* elem)
 : baseclass(name, elem)
 , _scoreIcon(new ImageWidget("scoreIcon"))
 , _scoreText(new TextWidget("scoreText"))
+, _timerText(new TextWidget("timerText"))
 {
 	Log::log.WriteDebug("TopGUI has been constructed");
 };
@@ -23,22 +25,36 @@ void TopGUI::Reset()
 	IRect topGUIRect = getClientRect();
 	
 	const IPoint scoreIconSize(60, 60);
-	const IPoint scoreIconIndent(12, 12);
-	const IPoint scoreTextIndent(14, 13);
+	const float  timerWidth = 60;
+	const IPoint widgetsIndent(12, 12);
+	
+	const IRect scoreImageRect(topGUIRect.x + widgetsIndent.x ,
+							   topGUIRect.y + topGUIRect.Height() - scoreIconSize.y - widgetsIndent.y,
+							   scoreIconSize.x, scoreIconSize.y);
 	
 	_scoreIcon->SetTextureName("Star");
-	_scoreIcon->setClientRect(IRect(topGUIRect.x + scoreIconIndent.x ,
-									topGUIRect.y + topGUIRect.Height() - scoreIconSize.y - scoreIconIndent.y,
-									scoreIconSize.x, scoreIconSize.y));
+	_scoreIcon->setClientRect(scoreImageRect);
 	
-    _scoreText->setClientRect(IRect(topGUIRect.x + scoreTextIndent.x ,
-								    topGUIRect.y + topGUIRect.Height() - scoreIconSize.y - scoreTextIndent.y,
-								    scoreIconSize.x, scoreIconSize.y));
+	const IRect scoreTextRect(scoreImageRect.x + 2, scoreImageRect.y + 1,
+							  scoreImageRect.Width()  - 4,
+							  scoreImageRect.Height() - 2);
+	
+    _scoreText->setClientRect(scoreTextRect);
+	
+	const IRect timerRect(scoreTextRect.x + scoreTextRect.Width() + widgetsIndent.x,
+						  scoreTextRect.y, timerWidth, scoreTextRect.Height());
+	
+	_timerText->setClientRect(timerRect);
 }
 	
 void TopGUI::SetScore(const std::string& score)
 {
 	_scoreText->SetCaption(score);
+}
+	
+void TopGUI::SetTimer(const std::string& timer)
+{
+	_timerText->SetCaption(timer);
 }
 
 void TopGUI::Draw()
@@ -51,12 +67,14 @@ void TopGUI::Draw()
 	
 	_scoreIcon->Draw();
 	_scoreText->Draw();
+	_timerText->Draw();
 }
 
 void TopGUI::Update(float dt)
 {
 	_scoreIcon->Update(dt);
 	_scoreText->Update(dt);
+	_timerText->Update(dt);
 }
 
 void TopGUI::AcceptMessage(const Message& message)

@@ -21,6 +21,8 @@ private:
 	
 	// Положение эффекта шлейфа от проджектайла
 	FPoint GetJetPosition() const;
+	
+	void UpdateAngle();
 
 private:
 	float _gravityFactor;

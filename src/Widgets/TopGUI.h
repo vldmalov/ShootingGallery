@@ -19,10 +19,12 @@ public:
 	
 	void Reset();
 	void SetScore(const std::string& score);
+	void SetTimer(const std::string& timer);
 	
 private:
 	std::unique_ptr<ImageWidget> _scoreIcon;
 	std::unique_ptr<TextWidget>  _scoreText;
+	std::unique_ptr<TextWidget>  _timerText;
 };
 
 }

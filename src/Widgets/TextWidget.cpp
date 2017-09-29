@@ -27,7 +27,7 @@ void TextWidget::Draw()
 		return;
 	}
 	
-	Render::BindFont("scoreFont");
+	Render::BindFont("textWidgetFont");
 	const IRect& widgetRect = getClientRect();
 	Render::PrintString(widgetRect.x + widgetRect.Width()  / 2,
 						widgetRect.y + widgetRect.Height() / 2,
