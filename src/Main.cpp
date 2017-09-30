@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "TestAppDelegate.h"
 
-#define MYAPPLICATION_NAME L"Rapid Aims"
+#define MYAPPLICATION_NAME L"Funny Bubbles"
 
 #if defined(ENGINE_TARGET_WIN32)
 int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)

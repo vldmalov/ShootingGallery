@@ -42,6 +42,4 @@ void TextWidget::Draw()
 						_caption, 1.0f, CenterAlign, CenterAlign, true);
 }
 	
-
-	
 }

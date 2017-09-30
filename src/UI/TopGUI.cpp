@@ -7,6 +7,8 @@ TopGUI::TopGUI()
 , _scoreIcon(new ImageWidget("scoreIcon"))
 , _scoreText(new TextWidget("scoreText"))
 , _timerText(new TextWidget("timerText"))
+, _menuButton(new ButtonWidget("menuButton"))
+, _menuText(new TextWidget("menuText"))
 {
 	Log::log.WriteDebug("TopGUI has been constructed");
 }
@@ -37,6 +39,20 @@ void TopGUI::Reset()
 	
 	_timerText->setClientRect(timerRect);
 	_timerText->SetFont("topGUIText");
+	
+	const int leftSideIndent(92);
+	const int menuButtonWidth(120);
+	IRect menuButtonRect(_clientRect.x + _clientRect.Width() - menuButtonWidth - leftSideIndent,
+						 timerRect.y + 6, menuButtonWidth, timerRect.Height() - 12);
+	
+	_menuButton->setClientRect(menuButtonRect);
+	_menuButton->SetTextureName("buttonTexture", buttonState::IDLE);
+	_menuButton->SetTextureName("buttonActiveTexture", buttonState::PUSHED);
+	_menuButton->SetStripesInfo(16, 16, 16, 16);
+	
+	_menuText->setClientRect(menuButtonRect);
+	_menuText->SetFont("topGUIText");
+	_menuText->SetCaption("Menu");
 }
 	
 void TopGUI::SetClientRect(const IRect& rect)
@@ -53,12 +69,19 @@ void TopGUI::SetTimer(const std::string& timer)
 {
 	_timerText->SetCaption(timer);
 }
+	
+void TopGUI::SetOnMenuButtonCallback(buttonAction cb)
+{
+	_menuButton->SetAction(cb);
+}
 
 void TopGUI::Draw()
 {
 	_scoreIcon->Draw();
 	_scoreText->Draw();
 	_timerText->Draw();
+	_menuButton->Draw();
+	_menuText->Draw();
 }
 
 void TopGUI::Update(float dt)
@@ -66,6 +89,22 @@ void TopGUI::Update(float dt)
 	_scoreIcon->Update(dt);
 	_scoreText->Update(dt);
 	_timerText->Update(dt);
+	_menuButton->Update(dt);
+	_menuText->Update(dt);
+}
+	
+bool TopGUI::MouseDown(const IPoint &mouse_pos)
+{
+	if(_menuButton->isVisible())
+		return _menuButton->MouseDown(mouse_pos);
+	
+	return false;
+}
+
+void TopGUI::MouseUp(const IPoint &mouse_pos)
+{
+	if(_menuButton->isVisible())
+		_menuButton->MouseUp(mouse_pos);
 }
 
 }

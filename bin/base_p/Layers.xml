@@ -5,21 +5,12 @@
         <Controls>
             <ImageWidget name="BackgroundWidget" />
         </Controls>
-       <!--   <Resource>
-            <group>BackgroundGroup</group>
-         </Resource>  -->
          <Script>BackgroundLayerFunc</Script>
-    </Layer>
-	<Layer name="MainSceneLayer">
-		<Controls>
-			<SceneWidget name="SceneWidget" />
-		</Controls>
-        <Script>MainSceneLayerFunc</Script>
-	</Layer>
-   <!--  <Layer name="MenuLayer">
+        </Layer>
+    <Layer name="MainSceneLayer">
         <Controls>
-            <TopGUI name="topGUI" />
+            <SceneWidget name="SceneWidget" />
         </Controls>
-        <Script>MenuLayerFunc</Script>
-    </Layer> -->
+        <Script>MainSceneLayerFunc</Script>
+    </Layer>
 </GUI>

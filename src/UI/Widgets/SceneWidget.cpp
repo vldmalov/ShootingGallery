@@ -23,6 +23,7 @@ void SceneWidget::ResetScene()
 	_scene->SetOnLevelFailureCallback(std::bind(&SceneWidget::ShowMenu, this, mainMenuState::TIME_IS_OVER));
 	
 	_topGUI->SetClientRect(getClientRect());
+	_topGUI->SetOnMenuButtonCallback(std::bind(&SceneWidget::ShowMenu, this, mainMenuState::PAUSE));
 	_topGUI->Reset();
 	
 	_mainMenu->setClientRect(getClientRect());
@@ -45,6 +46,10 @@ void SceneWidget::OnStartNewGame()
 	
 void SceneWidget::ShowMenu(const mainMenuState& state)
 {
+	if(state == mainMenuState::PAUSE) {
+		_scene->SetPause(true);
+	}
+	
 	_mainMenu->Show(state);
 }
 	
@@ -79,6 +84,10 @@ bool SceneWidget::MouseDown(const IPoint &mouse_pos)
 		return true;
 	}
 	
+	if(_topGUI->MouseDown(mouse_pos)) {
+		return true;
+	}
+	
 	return _scene->MouseDown(mouse_pos);
 }
 
@@ -90,29 +99,8 @@ void SceneWidget::MouseMove(const IPoint &mouse_pos)
 void SceneWidget::MouseUp(const IPoint &mouse_pos)
 {
 	_mainMenu->MouseUp(mouse_pos);
+	_topGUI->MouseUp(mouse_pos);
 	_scene->MouseUp(mouse_pos);
-}
-
-void SceneWidget::AcceptMessage(const Message& message)
-{
-	//
-	// Виджету могут посылаться сообщения с параметрами.
-	//
-
-	const std::string& publisher = message.getPublisher();
-	const std::string& data = message.getData();
-}
-
-void SceneWidget::KeyPressed(int keyCode)
-{
-	//
-	// keyCode - виртуальный код клавиши.
-	// В качестве значений для проверки нужно использовать константы VK_.
-	//
-
-	if (keyCode == VK_A) {
-		// Реакция на нажатие кнопки A
-	}
 }
 
 void SceneWidget::CharPressed(int unicodeChar)

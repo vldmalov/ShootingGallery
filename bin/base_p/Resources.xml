@@ -20,12 +20,10 @@
     </Textures>
     <Textures group="Common">
         <texture id="background" path="textures/background_sea" />
-        <texture id="blue_button" path="textures/Local/Buttons/9wayBtn" />
     </Textures>
 
     <Textures group="GameScene">
         <texture id="soapBubble" path="textures/SoapBubble" />
-        <texture id="seaStar" path="textures/seaStar" />
         <texture id="projectile" path="textures/Rocket" />
         <texture id="cannonBase" path="textures/CannonBase" />
         <texture id="cannon" path="textures/Cannon" />
