@@ -1,6 +1,6 @@
 #include "SceneWidget.h"
 
-#include "../Scene/Scene.h"
+#include "../../Scene/Scene.h"
 #include "TopGUI.h"
 #include "MainMenu.h"
 #include "TimeUtils.h"
@@ -10,7 +10,7 @@ namespace UI {
 SceneWidget::SceneWidget(const std::string& name, rapidxml::xml_node<>* elem)
 : Widget(name)
 , _scene(new Scene::Scene())
-, _topGUI(new TopGUI("topGUI"))
+, _topGUI(new TopGUI())
 , _mainMenu(new MainMenu())
 {
 }
@@ -22,7 +22,7 @@ void SceneWidget::ResetScene()
 	_scene->SetOnLevelCompleteCallback(std::bind(&SceneWidget::ShowMenu, this, mainMenuState::COMPLETE_LEVEL));
 	_scene->SetOnLevelFailureCallback(std::bind(&SceneWidget::ShowMenu, this, mainMenuState::TIME_IS_OVER));
 	
-	_topGUI->setClientRect(getClientRect());
+	_topGUI->SetClientRect(getClientRect());
 	_topGUI->Reset();
 	
 	_mainMenu->setClientRect(getClientRect());
@@ -122,12 +122,17 @@ void SceneWidget::CharPressed(int unicodeChar)
 	//
 
 	if (unicodeChar == L'p') {
-		_scene->SetPause(true);
-		ShowMenu(mainMenuState::PAUSE);
+		
+		if(_scene->IsGameActive() && !_scene->GetPause()) {
+			_scene->SetPause(true);
+			ShowMenu(mainMenuState::PAUSE);
+		}
 	}
 	
 	if (unicodeChar == L'r') {
-		_scene->Reset();
+		if(_scene->IsGameActive() && !_scene->GetPause()) {
+			_scene->Reset();
+		}
 	}
 }
 

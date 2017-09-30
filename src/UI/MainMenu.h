@@ -31,6 +31,9 @@ public:
 	void SetOnResumeGameCallback(buttonAction cb);
 	void SetOnStartNewGameCallback(buttonAction cb);
 	
+	MainMenu(const MainMenu&) = delete;
+	MainMenu& operator=(const MainMenu&) = delete;
+	
 private:
 	IRect _clientRect;
 	bool  _visible;

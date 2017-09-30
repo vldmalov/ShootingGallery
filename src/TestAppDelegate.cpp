@@ -3,7 +3,6 @@
 #include "SceneWidget.h"
 #include "ImageWidget.h"
 #include "TextWidget.h"
-#include "TopGUI.h"
 
 enum {
 	WINDOW_WIDTH = 1024,
@@ -41,7 +40,6 @@ void TestAppDelegate::RegisterTypes()
 	REGISTER_WIDGET_XML(UI::ImageWidget, "ImageWidget");
 	REGISTER_WIDGET_XML(UI::TextWidget,  "TextWidget");
 	REGISTER_WIDGET_XML(UI::SceneWidget, "SceneWidget");
-	REGISTER_WIDGET_XML(UI::TopGUI,		 "TopGUI");
 }
 
 void TestAppDelegate::LoadResources()

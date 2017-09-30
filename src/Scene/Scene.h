@@ -27,6 +27,7 @@ public:
 	
 	void Reset();
 	void SetPause(bool val);
+	bool GetPause() const;
 	void TogglePause();
 	
 	void Draw();
@@ -38,6 +39,7 @@ public:
 	
 	unsigned GetScore() const;
 	float GetTimeToEnd() const;
+	bool IsGameActive() const;
 	
 	void SetOnLevelCompleteCallback(voidCallback cb);
 	void SetOnLevelFailureCallback(voidCallback cb);

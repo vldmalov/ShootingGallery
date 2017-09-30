@@ -55,6 +55,11 @@ void Scene::SetPause(bool val)
 	_isPause = val;
 }
 	
+bool Scene::GetPause() const
+{
+	return _isPause;
+}
+	
 void Scene::TogglePause()
 {
 	_isPause = !_isPause;
@@ -242,6 +247,11 @@ unsigned Scene::GetScore() const
 float Scene::GetTimeToEnd() const
 {
 	return _timeToEnd;
+}
+	
+bool Scene::IsGameActive() const
+{
+	return _isGameActive;
 }
 	
 void Scene::OnScoreChanged()

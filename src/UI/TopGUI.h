@@ -5,23 +5,25 @@
 
 namespace UI {
 
-class TopGUI: public GUI::Widget
+class TopGUI
 {
-	typedef GUI::Widget baseclass;
 public:
-	TopGUI(const std::string& name);
-	TopGUI(const std::string& name, rapidxml::xml_node<>* elem);
+	TopGUI();
 	
-	void Draw() override;
-	void Update(float dt) override;
+	void Draw();
+	void Update(float dt);
 	
-	void AcceptMessage(const Message& message) override;
+	void SetClientRect(const IRect& rect);
 	
 	void Reset();
 	void SetScore(const std::string& score);
 	void SetTimer(const std::string& timer);
 	
+	TopGUI(const TopGUI&) = delete;
+	TopGUI& operator=(const TopGUI&) = delete;
+	
 private:
+	IRect _clientRect;
 	std::unique_ptr<ImageWidget> _scoreIcon;
 	std::unique_ptr<TextWidget>  _scoreText;
 	std::unique_ptr<TextWidget>  _timerText;

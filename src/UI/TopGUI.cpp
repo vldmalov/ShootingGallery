@@ -2,8 +2,8 @@
 
 namespace UI {
 
-TopGUI::TopGUI(const std::string& name)
-: baseclass(name)
+TopGUI::TopGUI()
+: _clientRect()
 , _scoreIcon(new ImageWidget("scoreIcon"))
 , _scoreText(new TextWidget("scoreText"))
 , _timerText(new TextWidget("timerText"))
@@ -11,25 +11,14 @@ TopGUI::TopGUI(const std::string& name)
 	Log::log.WriteDebug("TopGUI has been constructed");
 }
 	
-TopGUI::TopGUI(const std::string& name, rapidxml::xml_node<>* elem)
-: baseclass(name, elem)
-, _scoreIcon(new ImageWidget("scoreIcon"))
-, _scoreText(new TextWidget("scoreText"))
-, _timerText(new TextWidget("timerText"))
-{
-	Log::log.WriteDebug("TopGUI has been constructed");
-};
-	
 void TopGUI::Reset()
 {
-	IRect topGUIRect = getClientRect();
-	
 	const IPoint scoreIconSize(60, 60);
 	const float  timerWidth = 60;
 	const IPoint widgetsIndent(12, 12);
 	
-	const IRect scoreImageRect(topGUIRect.x + widgetsIndent.x ,
-							   topGUIRect.y + topGUIRect.Height() - scoreIconSize.y - widgetsIndent.y,
+	const IRect scoreImageRect(_clientRect.x + widgetsIndent.x ,
+							   _clientRect.y + _clientRect.Height() - scoreIconSize.y - widgetsIndent.y,
 							   scoreIconSize.x, scoreIconSize.y);
 	
 	_scoreIcon->SetTextureName("Star");
@@ -50,6 +39,11 @@ void TopGUI::Reset()
 	_timerText->SetFont("topGUIText");
 }
 	
+void TopGUI::SetClientRect(const IRect& rect)
+{
+	_clientRect = rect;
+}
+	
 void TopGUI::SetScore(const std::string& score)
 {
 	_scoreText->SetCaption(score);
@@ -62,12 +56,6 @@ void TopGUI::SetTimer(const std::string& timer)
 
 void TopGUI::Draw()
 {
-	baseclass::Draw();
-	
-	if(!isVisible()) {
-		return;
-	}
-	
 	_scoreIcon->Draw();
 	_scoreText->Draw();
 	_timerText->Draw();
@@ -78,16 +66,6 @@ void TopGUI::Update(float dt)
 	_scoreIcon->Update(dt);
 	_scoreText->Update(dt);
 	_timerText->Update(dt);
-}
-
-void TopGUI::AcceptMessage(const Message& message)
-{
-	//
-	// Виджету могут посылаться сообщения с параметрами.
-	//
-	
-	const std::string& publisher = message.getPublisher();
-	const std::string& data = message.getData();
 }
 
 }
