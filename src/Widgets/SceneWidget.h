@@ -7,6 +7,8 @@ namespace Scene {
 namespace UI {
 	
 class TopGUI;
+class MainMenu;
+enum class mainMenuState;
 	
 class SceneWidget : public GUI::Widget
 {
@@ -26,10 +28,18 @@ public:
 
 	void KeyPressed(int keyCode) override;
 	void CharPressed(int unicodeChar) override;
+	
+private:
+	void ShowMenu(const mainMenuState& state);
+	void HideMenu();
+	
+	void OnResumeGame();
+	void OnStartNewGame();
 
 private:
 	std::unique_ptr<Scene::Scene> _scene;
-	std::unique_ptr<TopGUI> _topGUI;
+	std::unique_ptr<TopGUI>		  _topGUI;
+	std::unique_ptr<MainMenu>	  _mainMenu;
 };
 
 }

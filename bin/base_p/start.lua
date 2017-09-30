@@ -29,8 +29,8 @@ GUI:LoadLayers("Layers.xml")
 -- изображения с диска и т.п. Это длительная операция.
 --
 UploadResourceGroup("Common")
-UploadResourceGroup("TestGroup")
 UploadResourceGroup("GameScene")
+UploadResourceGroup("MainMenu")
 
 --
 -- Слой кладётся на экран.
@@ -40,4 +40,3 @@ UploadResourceGroup("GameScene")
 --
 Screen:pushLayer("BackgroundLayer")
 Screen:pushLayer("MainSceneLayer")
---Screen:pushLayer("MenuLayer")

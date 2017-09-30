@@ -4,10 +4,8 @@
 
 namespace Scene {
 	
-class SceneDynamicObject;
-typedef std::shared_ptr<SceneDynamicObject> SceneDynamicObjectPtr;
-typedef std::list<SceneDynamicObjectPtr> SceneDynamicObjectPtrList;
-
+typedef std::function<void(void)> voidCallback;
+	
 class CircleTarget;
 typedef std::shared_ptr<CircleTarget> CircleTargetPtr;
 typedef std::list<CircleTargetPtr> CircleTargetPtrList;
@@ -41,6 +39,9 @@ public:
 	unsigned GetScore() const;
 	float GetTimeToEnd() const;
 	
+	void SetOnLevelCompleteCallback(voidCallback cb);
+	void SetOnLevelFailureCallback(voidCallback cb);
+	
 private:
 	void InitCannon();
 	
@@ -57,7 +58,7 @@ private:
 	void ProcessCollisions();
 	
 	void OnPreDestroyTarget(CircleTargetPtr obj);
-	void OnPreDestroyProjectile(ProjectilePtr obj);
+	void OnDestroyTarget();
 	
 	void ResetScore();
 	void IncreaseScore();
@@ -93,6 +94,10 @@ private:
 	
 	// Время до завершения раунда
 	float _timeToEnd;
+	
+	// Каллбеки на завершение игры
+	voidCallback _onLevelCompleteCallback;
+	voidCallback _onLevelFailureCallback;
 	
 };
 	

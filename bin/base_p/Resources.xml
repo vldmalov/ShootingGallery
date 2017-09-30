@@ -1,17 +1,21 @@
 <?xml version="1.0"?>
 <Resources>
-	<FreeTypeFonts group="TestGroup" upload="false">
+	<FreeTypeFonts group="Common" upload="false">
 		<font name="arial" family="arial" size="12" color="255;255;255;255" letterSpacing="0">
 			<Effect alpha="0.1" type="shadow" blurX="2" blurY="2" strength="50" angle="0" inner="false" color="0;0;0;255" offset="0"/>
 		</font>
-        <font name="textWidgetFont" family="Sansation-Bold" size="20" color="255;255;255;255" letterSpacing="0">
+        <font name="topGUIText" family="Sansation-Bold" size="20" color="255;255;255;255" letterSpacing="0">
             <Effect alpha="0.4" type="shadow" blurX="4" blurY="4" strength="10" angle="0" inner="false" color="0;0;0;255" offset="0"/>
+        </font>
+        <font name="mainMenuCaption" family="Sansation-Bold" size="42" color="255;255;255;255" letterSpacing="0">
+            <Effect alpha="0.4" type="shadow" blurX="6" blurY="6" strength="10" angle="0" inner="false" color="10;62;114;255" offset="0"/>
+        </font>
+        <font name="mainMenuButtonText" family="Sansation-Bold" size="24" color="255;255;255;255" letterSpacing="0">
+            <Effect alpha="0.4" type="shadow" blurX="6" blurY="6" strength="10" angle="0" inner="false" color="10;62;114;255" offset="0"/>
         </font>
 	</FreeTypeFonts>
 	<Textures>
-        <texture id="Star" path="textures/star.png" group="TestGroup" upload="false"/>
-   
-        <texture id="btnStart_Text" path="textures/Local/Buttons/Start_text.png" group="MainMenu" upload="true"/>
+        <texture id="Star" path="textures/star.png" group="GameScene" upload="false"/>
 
     </Textures>
     <Textures group="Common">
@@ -25,5 +29,10 @@
         <texture id="projectile" path="textures/Rocket" />
         <texture id="cannonBase" path="textures/CannonBase" />
         <texture id="cannon" path="textures/Cannon" />
+    </Textures>
+    <Textures group="MainMenu">
+        <texture id="menuPanel" path="textures/panel" />
+        <texture id="buttonTexture" path="textures/buttonTexture" />
+        <texture id="buttonActiveTexture" path="textures/buttonActiveTexture" />
     </Textures>
 </Resources>

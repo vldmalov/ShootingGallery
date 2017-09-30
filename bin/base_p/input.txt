@@ -1,12 +1,12 @@
-CountTarget=30
+CountTarget=35
 Speed=80
 Time=80
 MinTargetRadius=8
-MaxTargetRadius=25
+MaxTargetRadius=22
 TargetMaxSpeed=80.0
 TurretInitAngle=90
-TurretMinAngle=35.0
-TurretMaxAngle=145.0
+TurretMinAngle=25.0
+TurretMaxAngle=155.0
 TurretAngularVelocity=50.0
 TurretReloadTime=1.2
 turretLinkPointShiftX=0

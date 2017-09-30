@@ -35,16 +35,19 @@ void TopGUI::Reset()
 	_scoreIcon->SetTextureName("Star");
 	_scoreIcon->setClientRect(scoreImageRect);
 	
-	const IRect scoreTextRect(scoreImageRect.x + 2, scoreImageRect.y + 1,
-							  scoreImageRect.Width()  - 4,
-							  scoreImageRect.Height() - 2);
+	IPoint scoreTextShift(2, -1);
+	
+	const IRect scoreTextRect(scoreImageRect.x + scoreTextShift.x, scoreImageRect.y + scoreTextShift.y,
+							  scoreImageRect.Width(), scoreImageRect.Height());
 	
     _scoreText->setClientRect(scoreTextRect);
+	_scoreText->SetFont("topGUIText");
 	
 	const IRect timerRect(scoreTextRect.x + scoreTextRect.Width() + widgetsIndent.x,
 						  scoreTextRect.y, timerWidth, scoreTextRect.Height());
 	
 	_timerText->setClientRect(timerRect);
+	_timerText->SetFont("topGUIText");
 }
 	
 void TopGUI::SetScore(const std::string& score)

@@ -12,6 +12,8 @@ Scene::Scene()
 , _isGameActive(false)
 , _isPause(false)
 , _timeToEnd(0.f)
+, _onLevelCompleteCallback(nullptr)
+, _onLevelFailureCallback(nullptr)
 {
 	ResetScore();
 	Log::log.WriteDebug("Scene has been constructed");
@@ -44,6 +46,7 @@ void Scene::Reset()
 	assert(_timeToEnd > 0);
 	
 	InitCannon();
+	_projectiles.clear();
 	GenerateTargets();
 }
 	
@@ -121,20 +124,6 @@ void Scene::Draw()
 	
 	_effCont.Draw();
 }
-
-void Scene::OnLevelComplete()
-{
-	// Show results
-	// Show menu
-}
-	
-void Scene::OnGameOver()
-{
-	_isGameActive = false;
-	
-	// Show results
-	// Show menu
-}
 	
 void Scene::Update(float dt)
 {
@@ -142,9 +131,11 @@ void Scene::Update(float dt)
 		return;
 	}
 	
-	_timeToEnd -= dt;
-	if (_timeToEnd < 0.f && _isGameActive) {
-		OnGameOver();
+	if(_isGameActive) {
+		_timeToEnd -= dt;
+		if (_timeToEnd < 0.f) {
+			OnGameOver();
+		}
 	}
 
 	UpdateEffects(dt);
@@ -170,6 +161,7 @@ void Scene::UpdateTargets(float dt)
 		if((*it)->IsMarkedOnDelete()) {
 			OnPreDestroyTarget(*it);
 			_targets.erase(it++);
+			OnDestroyTarget();
 		}
 		else {
 			++it;
@@ -185,7 +177,6 @@ void Scene::UpdateProjectiles(float dt)
 		(*it)->Update(dt, _targetsRect);
 		
 		if((*it)->IsMarkedOnDelete()) {
-			OnPreDestroyProjectile(*it);
 			_projectiles.erase(it++);
 		}
 		else {
@@ -204,12 +195,11 @@ void Scene::UpdateCannon(float dt)
 void Scene::ProcessCollisions()
 {
 	float projectileCollisionRadius = Preferences::Instance().getFloatValue("ProjectileCollisionRadius", 0.f);
-	for(SceneDynamicObjectPtr projectilePtr : _projectiles) {
+	for(ProjectilePtr projectilePtr : _projectiles) {
 		const FPoint& projectilePos = projectilePtr->GetPosition();
 		
-		for(SceneDynamicObjectPtr objectPtr : _targets) {
-			CircleTargetPtr targetPtr = dynamic_pointer_cast<CircleTarget>(objectPtr);
-			if(targetPtr && targetPtr->IsCollisionWithCircle(projectilePos, projectileCollisionRadius)) {
+		for(CircleTargetPtr targetPtr : _targets) {
+			if(targetPtr->IsCollisionWithCircle(projectilePos, projectileCollisionRadius)) {
 				projectilePtr->SetMarkedOnDelete(true);
 				targetPtr->SetMarkedOnDelete(true);
 				break;
@@ -223,15 +213,13 @@ void Scene::OnPreDestroyTarget(CircleTargetPtr obj)
 	ParticleEffectPtr eff = _effCont.AddEffect("BubbleBoom");
 	eff->SetPos( obj->GetPosition() );
 	eff->Reset();
+}
 	
+void Scene::OnDestroyTarget()
+{
 	if(_isGameActive) {
 		IncreaseScore();
 	}
-}
-
-void Scene::OnPreDestroyProjectile(ProjectilePtr obj)
-{
-	
 }
 	
 void Scene::ResetScore()
@@ -259,8 +247,38 @@ float Scene::GetTimeToEnd() const
 void Scene::OnScoreChanged()
 {
 	// Проверка окончания игры
+	if(_targets.empty()) {
+		
+		OnLevelComplete();
+	}
 }
+	
+void Scene::SetOnLevelCompleteCallback(voidCallback cb)
+{
+	_onLevelCompleteCallback = cb;
+}
+	
+void Scene::SetOnLevelFailureCallback(voidCallback cb)
+{
+	_onLevelFailureCallback = cb;
+}
+	
+void Scene::OnLevelComplete()
+{
+	_isGameActive = false;
+	if(_onLevelCompleteCallback) {
+		_onLevelCompleteCallback();
+	}
+}
+	
+void Scene::OnGameOver()
+{
+	_isGameActive = false;
+	if(_onLevelFailureCallback) {
+		_onLevelFailureCallback();
+	}
 
+}
 
 bool Scene::MouseDown(const IPoint &mouse_pos)
 {

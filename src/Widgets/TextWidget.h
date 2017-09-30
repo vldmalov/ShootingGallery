@@ -10,11 +10,13 @@ namespace UI {
 		TextWidget(const std::string& name, rapidxml::xml_node<>* elem);
 		
 		void SetCaption(const std::string& caption);
+		void SetFont(const std::string& font);
 		
 		void Draw() override;
 
 	private:
 		std::string _caption;
+		std::string _font;
 	};
 	
 }

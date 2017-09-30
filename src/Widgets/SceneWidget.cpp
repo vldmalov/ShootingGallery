@@ -2,6 +2,7 @@
 
 #include "../Scene/Scene.h"
 #include "TopGUI.h"
+#include "MainMenu.h"
 #include "TimeUtils.h"
 
 namespace UI {
@@ -10,24 +11,55 @@ SceneWidget::SceneWidget(const std::string& name, rapidxml::xml_node<>* elem)
 : Widget(name)
 , _scene(new Scene::Scene())
 , _topGUI(new TopGUI("topGUI"))
+, _mainMenu(new MainMenu())
 {
-	
-//	void AddChild(Widget* child);
 }
 
 void SceneWidget::ResetScene()
 {
 	_scene->SetRect(getClientRect());
 	_scene->Reset();
+	_scene->SetOnLevelCompleteCallback(std::bind(&SceneWidget::ShowMenu, this, mainMenuState::COMPLETE_LEVEL));
+	_scene->SetOnLevelFailureCallback(std::bind(&SceneWidget::ShowMenu, this, mainMenuState::TIME_IS_OVER));
 	
 	_topGUI->setClientRect(getClientRect());
 	_topGUI->Reset();
+	
+	_mainMenu->setClientRect(getClientRect());
+	_mainMenu->Reset();
+	_mainMenu->SetOnResumeGameCallback(std::bind(&SceneWidget::OnResumeGame, this));
+	_mainMenu->SetOnStartNewGameCallback(std::bind(&SceneWidget::OnStartNewGame, this));
+	_mainMenu->Hide();
 }
+
+void SceneWidget::OnResumeGame()
+{
+	HideMenu();
+}
+	
+void SceneWidget::OnStartNewGame()
+{
+	ResetScene();
+}
+	
+	
+void SceneWidget::ShowMenu(const mainMenuState& state)
+{
+	_mainMenu->Show(state);
+}
+	
+void SceneWidget::HideMenu()
+{
+	_scene->SetPause(false);
+	_mainMenu->Hide();
+}
+
 
 void SceneWidget::Draw()
 {
 	_scene->Draw();
 	_topGUI->Draw();
+	_mainMenu->Draw();
 }
 
 void SceneWidget::Update(float dt)
@@ -43,6 +75,10 @@ void SceneWidget::Update(float dt)
 
 bool SceneWidget::MouseDown(const IPoint &mouse_pos)
 {
+	if(_mainMenu->MouseDown(mouse_pos)) {
+		return true;
+	}
+	
 	return _scene->MouseDown(mouse_pos);
 }
 
@@ -53,6 +89,7 @@ void SceneWidget::MouseMove(const IPoint &mouse_pos)
 
 void SceneWidget::MouseUp(const IPoint &mouse_pos)
 {
+	_mainMenu->MouseUp(mouse_pos);
 	_scene->MouseUp(mouse_pos);
 }
 
@@ -85,8 +122,12 @@ void SceneWidget::CharPressed(int unicodeChar)
 	//
 
 	if (unicodeChar == L'p') {
-		// Реакция на ввод символа 'а'
-		_scene->TogglePause();
+		_scene->SetPause(true);
+		ShowMenu(mainMenuState::PAUSE);
+	}
+	
+	if (unicodeChar == L'r') {
+		_scene->Reset();
 	}
 }
 
