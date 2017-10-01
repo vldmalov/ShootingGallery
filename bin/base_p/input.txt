@@ -1,6 +1,6 @@
 CountTarget     = 35
 Speed           = 80
-Time            = 80
+Time            = 85
 MinTargetRadius = 8
 MaxTargetRadius = 22
 TargetMaxSpeed  = 90.0
