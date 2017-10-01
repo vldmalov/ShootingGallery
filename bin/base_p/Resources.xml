@@ -14,12 +14,12 @@
             <Effect alpha="0.4" type="shadow" blurX="6" blurY="6" strength="10" angle="0" inner="false" color="10;62;114;255" offset="0"/>
         </font>
 	</FreeTypeFonts>
-	<Textures>
-        <texture id="Star" path="textures/star.png" group="GameScene" upload="false"/>
 
-    </Textures>
     <Textures group="Common">
         <texture id="background" path="textures/background_sea" />
+        <texture id="Star" path="textures/star.png" group="GameScene" upload="false"/>
+        <texture id="buttonTexture" path="textures/buttonTexture" />
+        <texture id="buttonActiveTexture" path="textures/buttonActiveTexture" />
     </Textures>
 
     <Textures group="GameScene">
@@ -30,7 +30,5 @@
     </Textures>
     <Textures group="MainMenu">
         <texture id="menuPanel" path="textures/panel" />
-        <texture id="buttonTexture" path="textures/buttonTexture" />
-        <texture id="buttonActiveTexture" path="textures/buttonActiveTexture" />
     </Textures>
 </Resources>
