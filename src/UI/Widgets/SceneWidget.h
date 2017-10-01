@@ -24,7 +24,7 @@ public:
 	void MouseMove(const IPoint& mouse_pos) override;
 	void MouseUp(const IPoint& mouse_pos) override;
 
-	void CharPressed(int unicodeChar) override;
+	void KeyPressed(int keyCode) override;
 	
 private:
 	void ShowMenu(const mainMenuState& state);

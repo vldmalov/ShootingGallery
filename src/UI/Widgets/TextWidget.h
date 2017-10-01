@@ -6,7 +6,7 @@ namespace UI {
 	{
 		typedef GUI::Widget baseclass;
 	public:
-		TextWidget(const std::string& name);
+		explicit TextWidget(const std::string& name);
 		TextWidget(const std::string& name, rapidxml::xml_node<>* elem);
 		
 		void SetCaption(const std::string& caption);

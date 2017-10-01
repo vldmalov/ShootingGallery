@@ -1,6 +1,6 @@
 #include "SceneWidget.h"
 
-#include "../../Scene/Scene.h"
+#include "Scene/Scene.h"
 #include "TopGUI.h"
 #include "MainMenu.h"
 #include "TimeUtils.h"
@@ -102,23 +102,22 @@ void SceneWidget::MouseUp(const IPoint &mouse_pos)
 	_topGUI->MouseUp(mouse_pos);
 	_scene->MouseUp(mouse_pos);
 }
-
-void SceneWidget::CharPressed(int unicodeChar)
+	
+void SceneWidget::KeyPressed(int keyCode)
 {
-	//
-	// unicodeChar - Unicode код введённого символа
-	//
-
-	if (unicodeChar == L'p') {
-		
-		if(_scene->IsGameActive() && !_scene->GetPause()) {
+	if (keyCode == VK_P || keyCode == VK_PAUSE || keyCode == VK_SPACE)
+	{
+		if(_scene->IsGameActive() && !_scene->GetPause())
+		{
 			_scene->SetPause(true);
 			ShowMenu(mainMenuState::PAUSE);
 		}
 	}
 	
-	if (unicodeChar == L'r') {
-		if(_scene->IsGameActive() && !_scene->GetPause()) {
+	if (keyCode == VK_R)
+	{
+		if(_scene->IsGameActive() && !_scene->GetPause())
+		{
 			_scene->Reset();
 		}
 	}

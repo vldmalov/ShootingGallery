@@ -165,7 +165,7 @@ void Scene::UpdateTargets(float dt)
 		
 		if((*it)->IsMarkedOnDelete()) {
 			OnPreDestroyTarget(*it);
-			_targets.erase(it++);
+			it = _targets.erase(it);
 			OnDestroyTarget();
 		}
 		else {
@@ -182,7 +182,7 @@ void Scene::UpdateProjectiles(float dt)
 		(*it)->Update(dt, _targetsRect);
 		
 		if((*it)->IsMarkedOnDelete()) {
-			_projectiles.erase(it++);
+			it = _projectiles.erase(it);
 		}
 		else {
 			++it;

@@ -50,6 +50,10 @@ void Preferences::ParsePreferencesLine(const std::string& line)
 	
 	std::string key(line.begin(), line.begin() + findPos);
 	std::string val(line.begin() + findPos + 1, line.end());
+	
+	// Удаляем все пробелы
+	key.erase( remove_if(key.begin(), key.end(), isspace), key.end());
+	val.erase( remove_if(val.begin(), val.end(), isspace), val.end());
 	Log::log.WriteInfo("Read preference: " + key + " = " + val);
 	
 	prefsMap[key] = val;

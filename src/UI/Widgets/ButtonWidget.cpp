@@ -5,7 +5,7 @@ namespace UI {
 	
 ButtonWidget::ButtonWidget(const std::string& name)
 : baseclass(name)
-, _currentState(buttonState::IDLE)
+, _currentState(BS_IDLE)
 , _callback(nullptr)
 {
 	Init();
@@ -14,7 +14,7 @@ ButtonWidget::ButtonWidget(const std::string& name)
 	
 ButtonWidget::ButtonWidget(const std::string& name, rapidxml::xml_node<>* elem)
 : baseclass(name, elem)
-, _currentState(buttonState::IDLE)
+, _currentState(BS_IDLE)
 , _callback(nullptr)
 {
 	Init();
@@ -23,15 +23,15 @@ ButtonWidget::ButtonWidget(const std::string& name, rapidxml::xml_node<>* elem)
 	
 void ButtonWidget::Init()
 {
-	_stretchBoxes[static_cast<int>(buttonState::IDLE)] = std::make_shared<StretchBox>();
-	_stretchBoxes[static_cast<int>(buttonState::PUSHED)] = std::make_shared<StretchBox>();
+	_stretchBoxes[BS_IDLE] = std::make_shared<StretchBox>();
+	_stretchBoxes[BS_PUSHED] = std::make_shared<StretchBox>();
 }
 
-void ButtonWidget::SetTextureName(const std::string& texture_name, const buttonState& state)
+void ButtonWidget::SetTextureName(const std::string& texture_name, buttonState state)
 {
 	Render::Texture* texture = Core::resourceManager.Get<Render::Texture>(texture_name);
 	if(texture) {
-		_stretchBoxes[static_cast<int>(state)]->SetTexture(texture);
+		_stretchBoxes[state]->SetTexture(texture);
 	}
 	else {
 		Log::log.WriteWarn("ButtonWidget::SetTextureName: texture named " + texture_name + " doesn't exist!");
@@ -41,11 +41,11 @@ void ButtonWidget::SetTextureName(const std::string& texture_name, const buttonS
 	
 void ButtonWidget::SetStripesInfo(float left, float right, float top, float bottom)
 {
-	_stretchBoxes[static_cast<int>(buttonState::IDLE)]->GenHorStripes(left, right);
-	_stretchBoxes[static_cast<int>(buttonState::IDLE)]->GenVertStripes(top, bottom);
+	_stretchBoxes[BS_IDLE]->GenHorStripes(left, right);
+	_stretchBoxes[BS_IDLE]->GenVertStripes(top, bottom);
 	
-	_stretchBoxes[static_cast<int>(buttonState::PUSHED)]->GenHorStripes(left, right);
-	_stretchBoxes[static_cast<int>(buttonState::PUSHED)]->GenVertStripes(top, bottom);
+	_stretchBoxes[BS_PUSHED]->GenHorStripes(left, right);
+	_stretchBoxes[BS_PUSHED]->GenVertStripes(top, bottom);
 }
 	
 void ButtonWidget::SetAction(buttonAction cb)
@@ -57,7 +57,7 @@ bool ButtonWidget::MouseDown(const IPoint& mouse_pos)
 {
 	if(getClientRect().Contains(mouse_pos))
 	{
-		_currentState = buttonState::PUSHED;
+		_currentState = BS_PUSHED;
 		return true;
 	}
 	
@@ -66,8 +66,8 @@ bool ButtonWidget::MouseDown(const IPoint& mouse_pos)
 	
 void ButtonWidget::MouseUp(const IPoint& mouse_pos)
 {
-	if(_currentState == buttonState::PUSHED) {
-		_currentState = buttonState::IDLE;
+	if(_currentState == BS_PUSHED) {
+		_currentState = BS_IDLE;
 		
 		if(getClientRect().Contains(mouse_pos)) {
 			if(_callback) {
@@ -85,7 +85,7 @@ void ButtonWidget::Draw()
 	
 	baseclass::Draw();
 	
-	_stretchBoxes[static_cast<int>(_currentState)]->Draw(getClientRect());
+	_stretchBoxes[_currentState]->Draw(getClientRect());
 }
 	
 }

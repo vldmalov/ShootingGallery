@@ -6,9 +6,9 @@ class StretchBox;
 
 namespace UI {
 	
-enum class buttonState : int {
-	IDLE,
-	PUSHED
+enum buttonState : int {
+	BS_IDLE,
+	BS_PUSHED
 };
 	
 typedef std::function<void(void)> buttonAction;
@@ -17,10 +17,10 @@ class ButtonWidget : public GUI::Widget
 {
 	typedef GUI::Widget baseclass;
 public:
-	ButtonWidget(const std::string& name);
+	explicit ButtonWidget(const std::string& name);
 	ButtonWidget(const std::string& name, rapidxml::xml_node<>* elem);
 	
-	void SetTextureName(const std::string& texture_name, const buttonState& state);
+	void SetTextureName(const std::string& texture_name, buttonState state);
 	void SetStripesInfo(float left, float right, float top, float bottom);
 	
 	void SetAction(buttonAction cb);

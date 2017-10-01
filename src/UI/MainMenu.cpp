@@ -53,8 +53,8 @@ void MainMenu::Reset()
 	_titleText->setClientRect(titleRect);
 	
 	_resumeGameButton->setClientRect(resumeBtnRect);
-	_resumeGameButton->SetTextureName("buttonTexture", buttonState::IDLE);
-	_resumeGameButton->SetTextureName("buttonActiveTexture", buttonState::PUSHED);
+	_resumeGameButton->SetTextureName("buttonTexture", BS_IDLE);
+	_resumeGameButton->SetTextureName("buttonActiveTexture", BS_PUSHED);
 	_resumeGameButton->SetStripesInfo(16, 16, 16, 16);
 	
 	_resumeGameText->SetCaption("Resume game");
@@ -62,8 +62,8 @@ void MainMenu::Reset()
 	_resumeGameText->setClientRect(resumeBtnRect);
 	
 	_startNewGameButton->setClientRect(restartBtnRect);
-	_startNewGameButton->SetTextureName("buttonTexture", buttonState::IDLE);
-	_startNewGameButton->SetTextureName("buttonActiveTexture", buttonState::PUSHED);
+	_startNewGameButton->SetTextureName("buttonTexture", BS_IDLE);
+	_startNewGameButton->SetTextureName("buttonActiveTexture", BS_PUSHED);
 	_startNewGameButton->SetStripesInfo(16, 16, 16, 16);
 	
 	_startNewGameText->SetCaption("Start new game");

@@ -6,7 +6,7 @@ class ImageWidget : public GUI::Widget
 {
 	typedef GUI::Widget baseclass;
 public:
-	ImageWidget(const std::string& name);
+	explicit ImageWidget(const std::string& name);
 	ImageWidget(const std::string& name, rapidxml::xml_node<>* elem);
 	
 	void SetTextureName(const std::string& texture_name);

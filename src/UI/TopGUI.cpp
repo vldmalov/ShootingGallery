@@ -46,8 +46,8 @@ void TopGUI::Reset()
 						 timerRect.y + 6, menuButtonWidth, timerRect.Height() - 12);
 	
 	_menuButton->setClientRect(menuButtonRect);
-	_menuButton->SetTextureName("buttonTexture", buttonState::IDLE);
-	_menuButton->SetTextureName("buttonActiveTexture", buttonState::PUSHED);
+	_menuButton->SetTextureName("buttonTexture", BS_IDLE);
+	_menuButton->SetTextureName("buttonActiveTexture", BS_PUSHED);
 	_menuButton->SetStripesInfo(16, 16, 16, 16);
 	
 	_menuText->setClientRect(menuButtonRect);
